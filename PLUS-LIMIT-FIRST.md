@@ -22,4 +22,5 @@
 6. ห้าม Auto เลือก Astra; คิมต้องถามบอสก่อน Astra ทุกครั้งค่ะ
 7. Ultra ต้องขออนุมัติใหม่ทุก activation ค่ะ
 
+
 แหล่งอ้างอิงทางการที่ใช้กำหนดนโยบาย: [Codex pricing](https://learn.chatgpt.com/docs/pricing), [Codex models](https://learn.chatgpt.com/docs/models), และ [latest model guide](https://developers.openai.com/api/docs/guides/latest-model) ค่ะ
