@@ -1,0 +1,341 @@
+{
+  "schema": "kimweaver-v2-candidate-manifest",
+  "version": 1,
+  "kimmizo_base": "bfd43f818ec809ca0e1ec74c7c36c4c4f2d4f7de",
+  "home_base": "662d8fa618aeaf669d1b102cb5345d20d8377a84",
+  "aggregate_algorithm": "sha256(canonical-json(files))",
+  "aggregate_sha256": "d8a9afb20f7f0b34105ea6ccf911afd023976c42609f5c14f38e19200f8be973",
+  "file_count": 55,
+  "files": [
+    {
+      "root": "kim_home_base",
+      "path": "docs/kimweaver/installation.md",
+      "sha256": "4b80e95a86332e54e02ad0bf88c90c96f12eac24b8f5a705fe0115e05940a2f0",
+      "size": 6054
+    },
+    {
+      "root": "kim_home_base",
+      "path": "scripts/validate_kimweaver.py",
+      "sha256": "917c147155d982c79ad5157533467843e34a03240886467d046d24223a5d7cba",
+      "size": 59225
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/SKILL.md",
+      "sha256": "6dbb8642f9db27b56cd9be946f400d27da8326f4f6ebdecc84799975b45a3ca6",
+      "size": 8659
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/adapters/document-data.json",
+      "sha256": "6076d7aeff15ab316736c8088f9a8591fc1b5bae3c9d285545623feacbc0c5ea",
+      "size": 604
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/adapters/research.json",
+      "sha256": "f92df39dda14c878a167f753e2e6d2b1ad45e57d141485461b3ce4b8bd1491c3",
+      "size": 598
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/adapters/secretary-coordination.json",
+      "sha256": "f2aaaa9bbec79587fbf8b15b8d639ff5bd9395efb9cfa606dd23abc586cbe217",
+      "size": 632
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/adapters/software.json",
+      "sha256": "398859be7ed92a275a1db561a12c2257ff08b5c280ffd054dc73f34b8a03706d",
+      "size": 669
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/bootstrap/model-policy.json",
+      "sha256": "1037f00d42e1e379919520b92a5fbdbbe679cb593ba9cdec5309e824f7b7860b",
+      "size": 2876
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/bootstrap/voice-bootstrap.json",
+      "sha256": "beb81f6e125b95d892b74525203178d13d4741f74e089300259674386c443a0b",
+      "size": 657
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/references/contracts.md",
+      "sha256": "59ad4325f672617bfc6d5d46c3af1f4cb86b766755ce64380eb8901301a15862",
+      "size": 6222
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/references/runtime-smoke-test.md",
+      "sha256": "060ee199148b359118d27c000fa6e58c2c301916a091fd2bff0b6d592cf2ead5",
+      "size": 3588
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/references/v2-contracts.md",
+      "sha256": "62bd138d6ace6098dc9795cb1cc94fa0016b553f26faa4fd16a921ff1b241faf",
+      "size": 2634
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/assignment.schema.json",
+      "sha256": "08d1be4d399905cd475c72e9889dc4b6081f85d50276fb31e4c7a3eb5a4c0b17",
+      "size": 1052
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/evidence-receipt.schema.json",
+      "sha256": "a5acfee96e697c5d137bd739a06d7f44764f68b05a24395372bd26afcfde800a",
+      "size": 696
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/review-packet.schema.json",
+      "sha256": "134cabf1271cc79e80fd8d720fddd841c9280c0f3675a35a350e92852e0b4213",
+      "size": 1162
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/routing-decision.schema.json",
+      "sha256": "60ef4d6f9c4206dd80ad0d03c5294b93598e9d6ee6bc31fd8dd830f8834c833f",
+      "size": 858
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/task-checkpoint.schema.json",
+      "sha256": "0352f4fb6c2528adb91747096573ce0a53bab82b91e748feb3422e4e9956d569",
+      "size": 909
+    },
+    {
+      "root": "kim_home_base",
+      "path": "skills/kimweaver/schemas/task-envelope.schema.json",
+      "sha256": "98b62027bf4069de07d0542e2e0d38e14379c11c31030d316f44f94ff6288ed6",
+      "size": 1272
+    },
+    {
+      "root": "kim_home_base",
+      "path": "tests/test_kimweaver_v2_workspace.py",
+      "sha256": "f713ee706cfc162f3a8aae33e8b16db3f416c812dbc643ec46c27d81e1781ddb",
+      "size": 4517
+    },
+    {
+      "root": "kim_home_base",
+      "path": "tests/test_kimweaver_workspace.py",
+      "sha256": "dd4c3e575e5c13fb7681b8f1aba15c6536fa033f23a0916d9cfc3d67cf987daf",
+      "size": 61581
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "README.md",
+      "sha256": "bb329709337756e217601195b9a75922e9d2b5c41f8a79bcb1f4c67a31cacb16",
+      "size": 16438
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/registry/model-policy.json",
+      "sha256": "1037f00d42e1e379919520b92a5fbdbbe679cb593ba9cdec5309e824f7b7860b",
+      "size": 2876
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/auto-model/Install-KimmizoCodexAuto.ps1",
+      "sha256": "63c833c51f38ac17129f6acc8670d4fcfc4a5ff0f07237ef4cf3d03f4c76054e",
+      "size": 26263
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/auto-model/KimmizoCodexAuto.cs",
+      "sha256": "cce332a18d3a9d5057dd8fe2f5a320e039b544f89268199193b00259b762978b",
+      "size": 91851
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo.py",
+      "sha256": "6acd917d11f5119e31468f1410dfca6113b1f838b30c902b5d1c17a3d7f669ae",
+      "size": 202340
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo_v2/__init__.py",
+      "sha256": "da1e0919ccbae7aa618120375a1a0be4a3c61db656cc0a8c777dc962728c93a4",
+      "size": 757
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo_v2/capsule.py",
+      "sha256": "90ae1946618b33cdc3d15d131a79bc70ddbdad0f7185436dd78982d33d5cdaae",
+      "size": 57848
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo_v2/contracts.py",
+      "sha256": "6c8e103ff3081fa297583832549edc8098631ea2f3881d3dc6916a9c30119bc3",
+      "size": 25278
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo_v2/legacy.py",
+      "sha256": "692a07ece61d921150779c7ac4c543a5cba83b72f6425bb3f5569db878117be1",
+      "size": 11631
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/scripts/kimmizo_v2/task_state.py",
+      "sha256": "f537d695c542ef9839fb5be22ed9e6f3b0a6bc4c4dbbd580de68b9458ee90092",
+      "size": 16919
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/templates/project-capsule/AGENTS.v2.block.md",
+      "sha256": "805430b47aaf90072e18f479625602e0b84c779ecee91c6905fd204129d3399f",
+      "size": 754
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/SKILL.md",
+      "sha256": "6dbb8642f9db27b56cd9be946f400d27da8326f4f6ebdecc84799975b45a3ca6",
+      "size": 8659
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/adapters/document-data.json",
+      "sha256": "6076d7aeff15ab316736c8088f9a8591fc1b5bae3c9d285545623feacbc0c5ea",
+      "size": 604
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/adapters/research.json",
+      "sha256": "f92df39dda14c878a167f753e2e6d2b1ad45e57d141485461b3ce4b8bd1491c3",
+      "size": 598
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/adapters/secretary-coordination.json",
+      "sha256": "f2aaaa9bbec79587fbf8b15b8d639ff5bd9395efb9cfa606dd23abc586cbe217",
+      "size": 632
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/adapters/software.json",
+      "sha256": "398859be7ed92a275a1db561a12c2257ff08b5c280ffd054dc73f34b8a03706d",
+      "size": 669
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/bootstrap/model-policy.json",
+      "sha256": "1037f00d42e1e379919520b92a5fbdbbe679cb593ba9cdec5309e824f7b7860b",
+      "size": 2876
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/bootstrap/voice-bootstrap.json",
+      "sha256": "beb81f6e125b95d892b74525203178d13d4741f74e089300259674386c443a0b",
+      "size": 657
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/references/contracts.md",
+      "sha256": "59ad4325f672617bfc6d5d46c3af1f4cb86b766755ce64380eb8901301a15862",
+      "size": 6222
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/references/runtime-smoke-test.md",
+      "sha256": "060ee199148b359118d27c000fa6e58c2c301916a091fd2bff0b6d592cf2ead5",
+      "size": 3588
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/references/v2-contracts.md",
+      "sha256": "62bd138d6ace6098dc9795cb1cc94fa0016b553f26faa4fd16a921ff1b241faf",
+      "size": 2634
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/assignment.schema.json",
+      "sha256": "08d1be4d399905cd475c72e9889dc4b6081f85d50276fb31e4c7a3eb5a4c0b17",
+      "size": 1052
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/evidence-receipt.schema.json",
+      "sha256": "a5acfee96e697c5d137bd739a06d7f44764f68b05a24395372bd26afcfde800a",
+      "size": 696
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/review-packet.schema.json",
+      "sha256": "134cabf1271cc79e80fd8d720fddd841c9280c0f3675a35a350e92852e0b4213",
+      "size": 1162
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/routing-decision.schema.json",
+      "sha256": "60ef4d6f9c4206dd80ad0d03c5294b93598e9d6ee6bc31fd8dd830f8834c833f",
+      "size": 858
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/task-checkpoint.schema.json",
+      "sha256": "0352f4fb6c2528adb91747096573ce0a53bab82b91e748feb3422e4e9956d569",
+      "size": 909
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "plugins/kimmizo-setup/vendor/kimweaver/schemas/task-envelope.schema.json",
+      "sha256": "98b62027bf4069de07d0542e2e0d38e14379c11c31030d316f44f94ff6288ed6",
+      "size": 1272
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "scripts/validate_repo.py",
+      "sha256": "fcbbbaf4684661569a978bf641019dac59674615e34e5de9d672fc4a4e731b11",
+      "size": 9317
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/fixtures/auto-model/AutoModelScopeHarness.cs",
+      "sha256": "5ca1ddf8a8c0c8e333055e453560401ca9cb0eb2a5bf584b74adf3f6417d35cf",
+      "size": 39282
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/fixtures/auto-model/Run-AutoModelScopeHarness.ps1",
+      "sha256": "58d0ee6784771dff4250824f00bff5dc1ff4ca35a3ba73e078721708d5d19c6f",
+      "size": 1316
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/test_auto_model_extension.py",
+      "sha256": "775e92f453dc33d2716f9cc4df0c8969d1bf1be042d5ebc925b3523215ce784c",
+      "size": 16083
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/test_capability_approval_target.py",
+      "sha256": "70abb0ce69577333f2fe1b266cfd8cf3301c4a036fed982f81bbfbd556ba84db",
+      "size": 5862
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/test_kimmizo_capsule_v2.py",
+      "sha256": "62b822916ab6b84782fa5360dca4438906ceffcacbf1de77be3c47dfda1f1dc6",
+      "size": 30195
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/test_kimmizo_v2.py",
+      "sha256": "2a4816b1dc7351fa91f2ec502ef56a0ef773e227c7c81f00ba6f3ff3c2d59030",
+      "size": 40720
+    },
+    {
+      "root": "kimmizo_setup",
+      "path": "tests/test_setup_transaction.py",
+      "sha256": "47737153557a7a5ec03288625a8cfe28562e248f477acfe4d68cd35d524345d6",
+      "size": 10396
+    }
+  ]
+}

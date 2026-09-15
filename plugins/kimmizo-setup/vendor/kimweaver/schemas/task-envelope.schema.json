@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/task-envelope-v2",
+  "title": "Kimweaver TaskEnvelope v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["goal", "authority_sources", "in_scope", "out_of_scope", "constraints", "acceptance", "privacy_class", "approval_boundary", "intent", "routing"],
+  "properties": {
+    "goal": {"type": "string", "minLength": 1},
+    "authority_sources": {"type": "array", "items": {"type": "string"}},
+    "in_scope": {"type": "array", "items": {"type": "string"}},
+    "out_of_scope": {"type": "array", "items": {"type": "string"}},
+    "constraints": {"type": "array", "items": {"type": "string"}},
+    "acceptance": {"type": "array", "items": {"type": "string"}},
+    "privacy_class": {"enum": ["public", "internal", "private", "sensitive"]},
+    "approval_boundary": {"type": "string", "minLength": 1},
+    "intent": {
+      "type": "object",
+      "required": ["goal", "constraints"],
+      "properties": {
+        "goal": {"type": "string", "minLength": 1},
+        "constraints": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "routing": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/assignment-v2",
+  "title": "Kimweaver Assignment v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["functional_role", "owner", "backend", "sandbox_mode", "runtime_evidence", "ownership", "focused_verification"],
+  "properties": {
+    "functional_role": {"enum": ["explore", "produce", "review", "compact"]},
+    "owner": {"enum": ["mira", "arin", "vera", "nami"]},
+    "backend": {"type": "string", "minLength": 1},
+    "sandbox_mode": {"enum": ["read-only", "workspace-write"]},
+    "runtime_evidence": {"enum": ["observed", "configured", "unverified"]},
+    "ownership": {
+      "type": "object",
+      "required": ["mode", "paths"],
+      "properties": {
+        "mode": {"const": "bounded"},
+        "paths": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "focused_verification": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

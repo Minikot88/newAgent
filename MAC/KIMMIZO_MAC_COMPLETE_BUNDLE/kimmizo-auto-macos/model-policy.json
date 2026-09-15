@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "policy_version": "1.0.0",
+  "virtual_model": "athena-auto",
+  "display_name": "✦ Auto",
+  "description": "ปรับโมเดลตามช่วงงาน",
+  "stores_prompts": false,
+  "routes": {
+    "fast": {
+      "models": ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol", "gpt-6-astra"],
+      "efforts": ["low", "medium"]
+    },
+    "balanced": {
+      "models": ["gpt-5.6-terra", "gpt-5.6-sol", "gpt-6-astra", "gpt-5.6-luna"],
+      "efforts": ["medium", "high", "low"]
+    },
+    "deep": {
+      "models": ["gpt-5.6-sol", "gpt-6-astra", "gpt-5.6-terra"],
+      "efforts": ["high", "xhigh", "max", "medium"]
+    },
+    "critical": {
+      "models": ["gpt-6-astra", "gpt-5.6-sol", "gpt-5.6-terra"],
+      "efforts": ["xhigh", "max", "high"]
+    },
+    "ultra": {
+      "models": ["gpt-6-astra", "gpt-5.6-sol"],
+      "efforts": ["ultra", "max", "xhigh"],
+      "requires_approval": true
+    }
+  }
+}

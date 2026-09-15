@@ -1,0 +1,20 @@
+{
+  "name": "kimmizo",
+  "interface": {
+    "displayName": "Kimmizo"
+  },
+  "plugins": [
+    {
+      "name": "kimmizo-setup",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kimmizo-setup"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

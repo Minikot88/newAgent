@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "bundle": "KIMMIZO_MAC_COMPLETE_BUNDLE",
+  "version": "1.0.0",
+  "builtAtUtc": "2026-09-14T11:59:13Z",
+  "buildHost": "windows/amd64",
+  "target": "darwin/arm64",
+  "goVersion": "go1.27.1",
+  "goToolchainSource": "https://go.dev/dl/go1.27.1.windows-amd64.zip",
+  "goToolchainArchiveSha256": "a3911b5e0e1b1053f25ed0675f4c1c6aad1e2bfcf253df2b9be4caabd2edd95d",
+  "cgoEnabled": false,
+  "buildFlags": ["-trimpath", "-ldflags=-s -w"],
+  "artifact": {
+    "path": "bin/darwin-arm64/kimmizo-auto",
+    "sizeBytes": 2902610,
+    "sha256": "62f012cb21235a479cd9a54869378c54216dce505c905c54a6e34deb066fff65",
+    "machoHeader": "cffaedfe0c0000010000000002000000"
+  },
+  "verification": {
+    "goTestsOnBuildHost": "29 passed",
+    "goVetOnBuildHost": "passed",
+    "raceDetector": "not run: the Windows build host has no C compiler; target uses CGO_ENABLED=0",
+    "installerSafetyContracts": "passed",
+    "shellSyntaxWithBashParser": "passed",
+    "liveMacAcceptance": "pending"
+  }
+}

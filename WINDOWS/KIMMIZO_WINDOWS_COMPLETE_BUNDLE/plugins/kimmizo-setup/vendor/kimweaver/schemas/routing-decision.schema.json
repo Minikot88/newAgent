@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/routing-decision-v2",
+  "title": "Kimweaver RoutingDecision v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["status", "execution_mode", "reason", "assurance_level", "adapter", "reason_codes", "context_budget", "fallback"],
+  "properties": {
+    "status": {"enum": ["scoped", "blocked"]},
+    "execution_mode": {"enum": ["auto", "solo", "solo-reviewed", "team"]},
+    "reason": {"type": "string", "minLength": 1},
+    "assurance_level": {"enum": ["standard", "reviewed", "protected"]},
+    "adapter": {"type": "string", "minLength": 1},
+    "reason_codes": {"type": "array", "items": {"type": "string"}},
+    "context_budget": {"type": "object"},
+    "fallback": {"type": ["object", "null"]}
+  },
+  "additionalProperties": false
+}

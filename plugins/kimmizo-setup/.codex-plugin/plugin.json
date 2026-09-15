@@ -1,0 +1,38 @@
+{
+  "name": "kimmizo-setup",
+  "version": "1.0.0+codex.20260810103625",
+  "description": "Bootstrap a project-local Thai secretary, capability router, custom agent team, checkpoints, memory, doctor and repair workflow.",
+  "author": {
+    "name": "Tongkung TK"
+  },
+  "homepage": "https://github.com/tongkungtk/kimmizo_setup",
+  "repository": "https://github.com/tongkungtk/kimmizo_setup",
+  "license": "MIT",
+  "keywords": [
+    "bootstrap",
+    "orchestration",
+    "subagents",
+    "memory",
+    "thai"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kimmizo Setup",
+    "shortDescription": "Prepare \u0e40\u0e25\u0e02\u0e32\u0e04\u0e34\u0e21, a project team, routing, and memory.",
+    "longDescription": "Kimmizo Setup audits the host and target project, prepares trusted baseline capabilities, creates a project-local Thai secretary and stable custom-agent identities, routes work without requiring tool names, preserves existing project configuration through checksummed managed blocks, and maintains compact checkpoints and evidence-backed lessons.",
+    "developerName": "Tongkung TK",
+    "category": "Productivity",
+    "capabilities": [
+      "Workflow",
+      "Developer Tools",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Set up \u0e40\u0e25\u0e02\u0e32\u0e04\u0e34\u0e21 in this project.",
+      "Run Kimmizo doctor for this project.",
+      "Repair the Kimmizo project capsule."
+    ],
+    "websiteURL": "https://github.com/tongkungtk/kimmizo_setup"
+  }
+}

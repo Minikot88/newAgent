@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "id": "document-data",
+  "version": "2.0.0",
+  "required_skills": [],
+  "risk_overrides": {"reviewed": ["executive_document", "material_calculation"], "protected": ["sensitive_dataset", "financial_output"]},
+  "acceptance_template": ["artifact opens", "content and formatting", "calculation or schema integrity", "delivery path"],
+  "context_policy": {"max_sources": 6, "max_lines": 300, "return_max_bullets": 10},
+  "verification_profile": ["artifact parse", "render or recalculation", "delivery manifest"],
+  "external_action_types": ["upload", "share", "send", "publish"]
+}

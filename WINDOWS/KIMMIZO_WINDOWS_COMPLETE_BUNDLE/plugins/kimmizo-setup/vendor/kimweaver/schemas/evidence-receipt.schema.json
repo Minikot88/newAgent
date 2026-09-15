@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/evidence-receipt-v2",
+  "title": "Kimweaver EvidenceReceipt v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["acceptance_item", "check", "outcome", "artifact", "proof_state"],
+  "properties": {
+    "acceptance_item": {"type": "string", "minLength": 1},
+    "check": {"type": "string", "minLength": 1},
+    "outcome": {"enum": ["passed", "failed", "not_run", "not_applicable"]},
+    "artifact": {"type": ["string", "null"]},
+    "proof_state": {"enum": ["implemented", "statically_verified", "runtime_observed", "not_yet_proved"]}
+  },
+  "additionalProperties": false
+}

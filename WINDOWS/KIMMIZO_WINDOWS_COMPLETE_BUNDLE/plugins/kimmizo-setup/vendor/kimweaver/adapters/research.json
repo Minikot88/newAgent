@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "id": "research",
+  "version": "2.0.0",
+  "required_skills": [],
+  "risk_overrides": {"reviewed": ["decision_brief", "wide_architecture"], "protected": ["private_source", "regulated_decision"]},
+  "acceptance_template": ["source coverage", "freshness", "claim-to-source traceability", "gaps"],
+  "context_policy": {"max_sources": 6, "max_lines": 300, "return_max_bullets": 10},
+  "verification_profile": ["source inspection", "citation check", "conflict and uncertainty review"],
+  "external_action_types": ["publish", "send_message", "update_external_knowledge_base"]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kimmizo Setup"
+  short_description: "Bootstrap เลขาคิม ทีม เครื่องมือ และความจำประจำโปรเจกต์"
+  default_prompt: "Use $kimmizo-setup to audit this project, prepare the smallest safe capability set, create a stable project-local team, and verify the Kimmizo capsule."

@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "routing_version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "multi-agent",
+      "tier": 0,
+      "kind": "host_feature",
+      "description": "Built-in subagent orchestration",
+      "detect": {"feature": "multi_agent"},
+      "install": null
+    },
+    {
+      "id": "skill-discovery",
+      "tier": 0,
+      "kind": "host_feature",
+      "description": "Local skill and plugin discovery",
+      "detect": {"directories": [".codex/skills", ".agents/skills"]},
+      "install": null
+    },
+    {
+      "id": "skill-installer",
+      "tier": 0,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/.system/skill-installer/SKILL.md"]},
+      "install": null
+    },
+    {
+      "id": "skill-creator",
+      "tier": 0,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/.system/skill-creator/SKILL.md"]},
+      "install": null
+    },
+    {
+      "id": "plugin-creator",
+      "tier": 0,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/.system/plugin-creator/SKILL.md"]},
+      "install": null
+    },
+    {
+      "id": "openai-docs",
+      "tier": 0,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/.system/openai-docs/SKILL.md"]},
+      "install": null
+    },
+    {
+      "id": "imagegen",
+      "tier": 0,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/.system/imagegen/SKILL.md"]},
+      "install": null
+    },
+    {
+      "id": "git",
+      "tier": 0,
+      "kind": "cli",
+      "detect": {"commands": ["git"]},
+      "install": {"commands": [["winget", "install", "--id", "Git.Git", "--exact", "--source", "winget", "--accept-source-agreements", "--accept-package-agreements", "--disable-interactivity"]], "version_command": ["git", "--version"], "version_regex": "^git version .+$", "approval": "none", "restart": true}
+    },
+    {
+      "id": "python",
+      "tier": 0,
+      "kind": "cli",
+      "detect": {"commands": ["python", "py"]},
+      "install": {"commands": [["winget", "install", "--id", "Python.Python.3.13", "--exact", "--source", "winget", "--accept-source-agreements", "--accept-package-agreements", "--disable-interactivity"]], "version_command": ["python", "--version"], "version_regex": "^Python 3\\.13\\..+$", "approval": "none", "restart": true}
+    },
+    {
+      "id": "model-catalog",
+      "tier": 0,
+      "kind": "host_feature",
+      "detect": {"config_keys": ["model", "model_reasoning_effort"]},
+      "install": null
+    },
+    {
+      "id": "superpowers",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "superpowers@openai-curated",
+      "detect": {
+        "config_selector": "superpowers@openai-curated",
+        "cache_paths": [".codex/plugins/cache/openai-curated-remote/superpowers/*/skills/using-superpowers/SKILL.md"]
+      },
+      "install": {"command": ["codex", "plugin", "add", "superpowers@openai-curated"], "approval": "none"},
+      "routing": ["planning", "tdd", "debugging", "parallel", "verification"]
+    },
+    {
+      "id": "grill-me",
+      "tier": 1,
+      "kind": "skill",
+      "detect": {"skill_paths": [".codex/skills/grill-me/SKILL.md", ".agents/skills/grill-me/SKILL.md"]},
+      "install": {"method": "pinned_github_zip", "archive_url": "https://codeload.github.com/mattpocock/skills/zip/391a2701dd948f94f56a39f7533f8eea9a859c87", "archive_sha256": "d1a1069b4ceb6ccf04717f16db698bbef54587442136312832eb9fecd5b0a602", "skill_subpath": "skills/productivity/grill-me", "approval": "none", "restart": true},
+      "routing": ["ambiguous-important", "conflicting-requirements", "stress-test"]
+    },
+    {
+      "id": "adhd",
+      "tier": 1,
+      "kind": "skill",
+      "detect": {"skill_paths": [".agents/skills/adhd/SKILL.md", ".codex/skills/adhd/SKILL.md"]},
+      "install": {"method": "pinned_github_zip", "archive_url": "https://codeload.github.com/UditAkhourii/adhd/zip/c5287d381f4148276ee2646348f90bf63581ddce", "archive_sha256": "cb98f99417f7df84741fed62cfe5f36943fbc4e3ced28b9d0ac6478392d2e72f", "skill_subpath": "skills/adhd", "approval": "none", "restart": true},
+      "routing": ["open-ended-high-impact", "architecture", "naming", "api-design", "fuzzy-debugging"]
+    },
+    {
+      "id": "browser",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "browser@openai-bundled",
+      "detect": {
+        "config_selector": "browser@openai-bundled",
+        "cache_paths": [".codex/plugins/cache/openai-bundled/browser/*/skills/control-in-app-browser/SKILL.md"]
+      },
+      "install": {"command": ["codex", "plugin", "add", "browser@openai-bundled"], "approval": "none", "restart": true},
+      "routing": ["in-app-browser", "localhost", "local-web"]
+    },
+    {
+      "id": "chrome",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "chrome@openai-bundled",
+      "detect": {
+        "config_selector": "chrome@openai-bundled",
+        "cache_paths": [".codex/plugins/cache/openai-bundled/chrome/*/skills/control-chrome/SKILL.md"]
+      },
+      "install": {"command": ["codex", "plugin", "add", "chrome@openai-bundled"], "approval": "system_once", "restart": true},
+      "routing": ["logged-in-browser", "existing-cookie", "existing-tab"]
+    },
+    {
+      "id": "computer-use",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "computer-use@openai-bundled",
+      "detect": {
+        "config_selector": "computer-use@openai-bundled",
+        "cache_paths": [".codex/plugins/cache/openai-bundled/computer-use/*/skills/computer-use/SKILL.md"]
+      },
+      "install": {"command": ["codex", "plugin", "add", "computer-use@openai-bundled"], "approval": "system_once", "restart": true},
+      "routing": ["windows-desktop", "native-app", "no-api", "no-cli"]
+    },
+    {
+      "id": "documents",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "documents@openai-primary-runtime",
+      "detect": {"config_selector": "documents@openai-primary-runtime", "cache_paths": [".codex/plugins/cache/openai-primary-runtime/documents/*/skills/*/SKILL.md", ".cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime/plugins/documents/skills/*/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "documents@openai-primary-runtime"], "approval": "none"},
+      "routing": ["docx", "document"]
+    },
+    {
+      "id": "pdf",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "pdf@openai-primary-runtime",
+      "detect": {"config_selector": "pdf@openai-primary-runtime", "cache_paths": [".codex/plugins/cache/openai-primary-runtime/pdf/*/skills/*/SKILL.md", ".cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime/plugins/pdf/skills/*/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "pdf@openai-primary-runtime"], "approval": "none"},
+      "routing": ["pdf"]
+    },
+    {
+      "id": "spreadsheets",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "spreadsheets@openai-primary-runtime",
+      "detect": {"config_selector": "spreadsheets@openai-primary-runtime", "cache_paths": [".codex/plugins/cache/openai-primary-runtime/spreadsheets/*/skills/*/SKILL.md", ".cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime/plugins/spreadsheets/skills/*/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "spreadsheets@openai-primary-runtime"], "approval": "none"},
+      "routing": ["xlsx", "csv", "spreadsheet"]
+    },
+    {
+      "id": "presentations",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "presentations@openai-primary-runtime",
+      "detect": {"config_selector": "presentations@openai-primary-runtime", "cache_paths": [".codex/plugins/cache/openai-primary-runtime/presentations/*/skills/*/SKILL.md", ".cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime/plugins/presentations/skills/*/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "presentations@openai-primary-runtime"], "approval": "none"},
+      "routing": ["pptx", "slides", "presentation"]
+    },
+    {
+      "id": "visualize",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "visualize@openai-bundled",
+      "detect": {"config_selector": "visualize@openai-bundled", "cache_paths": [".codex/plugins/cache/openai-bundled/visualize/*/skills/*/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "visualize@openai-bundled"], "approval": "none"},
+      "routing": ["diagram", "complex-relationships", "chart"]
+    },
+    {
+      "id": "github",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "github@openai-curated",
+      "detect": {"config_selector": "github@openai-curated", "cache_paths": [".codex/plugins/cache/openai-curated-remote/github/*/skills/github/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "github@openai-curated"], "approval": "system_once", "auth": true, "mcp": true, "app": true, "external_write": true},
+      "routing": ["pull-request", "issue", "ci", "publish"]
+    },
+    {
+      "id": "data-analytics",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "data-analytics@openai-curated",
+      "detect": {"config_selector": "data-analytics@openai-curated", "cache_paths": [".codex/plugins/cache/openai-curated-remote/data-analytics/*/skills/index/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "data-analytics@openai-curated"], "approval": "system_once", "mcp": true, "app": true, "external_write": true},
+      "routing": ["business-data", "kpi", "metrics", "dataset"]
+    },
+    {
+      "id": "codex-security",
+      "tier": 1,
+      "kind": "plugin",
+      "selector": "codex-security@openai-curated",
+      "detect": {"config_selector": "codex-security@openai-curated", "cache_paths": [".codex/plugins/cache/openai-curated-remote/codex-security/*/skills/security-scan/SKILL.md"]},
+      "install": {"command": ["codex", "plugin", "add", "codex-security@openai-curated"], "approval": "system_once", "mcp": true, "app": true, "external_write": true},
+      "routing": ["auth", "secret", "network", "dependency", "deploy", "high-risk-diff"]
+    },
+    {
+      "id": "agent-browser",
+      "tier": 2,
+      "kind": "skill_cli",
+      "detect": {"skill_paths": [".agents/skills/agent-browser/SKILL.md", ".codex/skills/agent-browser/SKILL.md"], "commands": ["agent-browser"]},
+      "install": {"commands": [["npm", "install", "-g", "agent-browser@0.29.1"]], "version_command": ["agent-browser", "--version"], "version_regex": "^agent-browser 0\\.29\\.1$|^0\\.29\\.1$", "runtime_policy": "use_existing_system_browser", "approval": "none"},
+      "routing": ["headless", "cdp", "electron", "repeatable-web-qa"]
+    },
+    {"id": "sites", "tier": 2, "kind": "plugin", "selector": "sites@openai-bundled", "detect": {"config_selector": "sites@openai-bundled"}, "install": {"command": ["codex", "plugin", "add", "sites@openai-bundled"], "approval": "none"}, "routing": ["website"]},
+    {"id": "build-web-apps", "tier": 2, "kind": "plugin", "selector": "build-web-apps@openai-curated", "detect": {"config_selector": "build-web-apps@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "build-web-apps@openai-curated"], "approval": "none"}, "routing": ["web-application"]},
+    {"id": "supabase", "tier": 2, "kind": "plugin", "selector": "supabase@openai-curated", "detect": {"config_selector": "supabase@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "supabase@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["supabase", "postgres", "database"]},
+    {"id": "vercel", "tier": 2, "kind": "plugin", "selector": "vercel@openai-curated", "detect": {"config_selector": "vercel@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "vercel@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["vercel", "deployment"]},
+    {"id": "figma", "tier": 2, "kind": "plugin", "selector": "figma@openai-curated", "detect": {"config_selector": "figma@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "figma@openai-curated"], "approval": "system_once", "auth": true}, "routing": ["figma", "design"]},
+    {"id": "canva", "tier": 2, "kind": "plugin", "selector": "canva@openai-curated", "detect": {"config_selector": "canva@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "canva@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["canva", "design"]},
+    {"id": "heygen", "tier": 2, "kind": "plugin", "selector": "heygen@openai-curated", "detect": {"config_selector": "heygen@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "heygen@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["avatar-video"]},
+    {"id": "openai-developers", "tier": 2, "kind": "plugin", "selector": "openai-developers@openai-curated", "detect": {"config_selector": "openai-developers@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "openai-developers@openai-curated"], "approval": "none"}, "routing": ["openai-api", "openai-sdk"]},
+    {"id": "codex-reviewer", "tier": 2, "kind": "plugin", "selector": "codex-reviewer@awesome-codex-plugins", "detect": {"config_selector": "codex-reviewer@awesome-codex-plugins", "commands": ["gh"]}, "install": {"command": ["codex", "plugin", "add", "codex-reviewer@awesome-codex-plugins"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["pull-request-review"]},
+    {"id": "neon-postgres", "tier": 2, "kind": "plugin", "selector": "neon-postgres@openai-curated", "detect": {"config_selector": "neon-postgres@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "neon-postgres@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["neon", "postgres", "database", "migration"]},
+    {"id": "cloudflare", "tier": 2, "kind": "plugin", "selector": "cloudflare@openai-curated", "detect": {"config_selector": "cloudflare@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "cloudflare@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["cloudflare", "worker", "pages", "deployment"]},
+    {"id": "sentry", "tier": 2, "kind": "plugin", "selector": "sentry@openai-curated", "detect": {"config_selector": "sentry@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "sentry@openai-curated"], "approval": "system_once", "auth": true}, "routing": ["sentry", "error-monitoring", "observability"]},
+    {"id": "datadog", "tier": 2, "kind": "plugin", "selector": "datadog@openai-curated", "detect": {"config_selector": "datadog@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "datadog@openai-curated"], "approval": "system_once", "auth": true}, "routing": ["datadog", "metrics", "logs", "observability"]},
+    {"id": "remotion", "tier": 2, "kind": "plugin", "selector": "remotion@openai-curated", "detect": {"config_selector": "remotion@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "remotion@openai-curated"], "approval": "none"}, "routing": ["remotion", "programmatic-video"]},
+    {"id": "google-drive", "tier": 2, "kind": "plugin", "selector": "google-drive@openai-curated", "detect": {"config_selector": "google-drive@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "google-drive@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["google-drive", "drive-file", "knowledge"]},
+    {"id": "notion", "tier": 2, "kind": "plugin", "selector": "notion@openai-curated", "detect": {"config_selector": "notion@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "notion@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["notion", "knowledge-base"]},
+    {"id": "gmail", "tier": 2, "kind": "plugin", "selector": "gmail@openai-curated", "detect": {"config_selector": "gmail@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "gmail@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["gmail", "email"]},
+    {"id": "slack", "tier": 2, "kind": "plugin", "selector": "slack@openai-curated", "detect": {"config_selector": "slack@openai-curated"}, "install": {"command": ["codex", "plugin", "add", "slack@openai-curated"], "approval": "system_once", "auth": true, "external_write": true}, "routing": ["slack", "team-message"]},
+    {"id": "codebase-recon", "tier": 2, "kind": "plugin", "selector": "codebase-recon@awesome-codex-plugins", "detect": {"config_selector": "codebase-recon@awesome-codex-plugins"}, "install": {"command": ["codex", "plugin", "add", "codebase-recon@awesome-codex-plugins"], "approval": "system_once"}, "routing": ["git-history", "onboarding", "hotspot"]},
+    {"id": "domain-trading", "tier": 2, "kind": "domain_policy", "detect": {}, "install": {"approval": "system_once"}, "routing": ["mql5", "mt5", "trading", "risk"]},
+    {"id": "domain-content", "tier": 2, "kind": "domain_policy", "detect": {}, "install": {"approval": "system_once"}, "routing": ["newsroom", "content-pipeline", "publishing"]},
+    {"id": "domain-finance", "tier": 2, "kind": "domain_policy", "detect": {}, "install": {"approval": "system_once"}, "routing": ["finance", "portfolio", "market-data"]}
+  ]
+}

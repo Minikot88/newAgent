@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "id": "software",
+  "version": "2.0.0",
+  "required_skills": ["Superpowers:test-driven-development", "Superpowers:verification-before-completion"],
+  "risk_overrides": {"protected": ["auth", "authorization", "money", "migration", "destructive", "public_api", "production"]},
+  "acceptance_template": ["observable behavior", "regression evidence", "candidate verification"],
+  "context_policy": {"max_sources": 6, "max_lines": 300, "return_max_bullets": 10},
+  "verification_profile": ["focused", "candidate", "runtime_when_required"],
+  "external_action_types": ["commit", "push", "pull_request", "merge", "deploy", "production_migration"]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "id": "windows-community-computer-use",
+      "when": {"platform": "windows", "capability": "community-computer-use"},
+      "action": "block",
+      "prefer": "computer-use",
+      "reason": "The community skill targets Linux/Xvfb and collides with the official Windows plugin name."
+    },
+    {
+      "id": "implicit-using-superpowers",
+      "when": {"capability": "using-superpowers"},
+      "action": "disable_implicit_routing",
+      "prefer": "named-superpowers-subskill",
+      "reason": "Load only the workflow subskill needed for the current task."
+    },
+    {
+      "id": "duplicate-context-manager",
+      "when": {"category": "context-checkpoint"},
+      "action": "disable_unless_benchmarked",
+      "prefer": "kimmizo-memory",
+      "reason": "Avoid duplicate checkpoint systems and context growth."
+    },
+    {
+      "id": "untrusted-install",
+      "when": {"source": "unknown"},
+      "action": "block",
+      "reason": "Unknown or unpinned sources may not be installed automatically."
+    },
+    {
+      "id": "authority-change",
+      "when": {"any": ["auth", "hook", "mcp", "app", "new_permissions", "external_write"]},
+      "action": "require_boss_approval",
+      "reason": "New authority requires an explicit system approval."
+    }
+  ]
+}

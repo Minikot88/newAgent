@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/task-checkpoint-v2",
+  "title": "Kimweaver TaskCheckpoint v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["task_id", "state", "revision", "decisions", "evidence", "blockers", "next_actions"],
+  "properties": {
+    "task_id": {"type": "string", "format": "uuid"},
+    "state": {"enum": ["scoped", "in_progress", "checkpoint_ready", "parent_verified", "review_ready", "complete", "needs_approval", "partial", "blocked", "rethink"]},
+    "revision": {"type": "integer", "minimum": 1},
+    "decisions": {"type": "array", "items": {"type": "string"}},
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "next_actions": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}
