@@ -1,0 +1,27 @@
+{
+  "baseline": [
+    "multi-agent",
+    "skill-discovery",
+    "skill-installer",
+    "skill-creator",
+    "plugin-creator",
+    "openai-docs",
+    "imagegen",
+    "git",
+    "python",
+    "model-catalog",
+    "grill-me",
+    "adhd",
+    "browser",
+    "chrome",
+    "computer-use",
+    "documents",
+    "pdf",
+    "spreadsheets",
+    "presentations",
+    "visualize"
+  ],
+  "project_recommended": [],
+  "routing_policy": "load_metadata_then_only_selected_capability",
+  "schema_version": 1
+}

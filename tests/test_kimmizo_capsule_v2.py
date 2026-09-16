@@ -144,6 +144,7 @@ def test_v2_capsule_contains_all_adapter_contracts_and_local_voice_policy(kimmiz
         "schemaVersion": 3,
         "policyVersion": policy["policy_version"],
         "policySha256": hashlib.sha256(policy_bytes).hexdigest(),
+        "configured": False,
         "trigger": policy["voice"]["trigger"],
         "pronoun": policy["voice"]["pronoun"],
         "suffix": policy["voice"]["suffix"],

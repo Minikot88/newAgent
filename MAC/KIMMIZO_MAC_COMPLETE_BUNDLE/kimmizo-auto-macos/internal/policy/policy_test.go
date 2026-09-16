@@ -144,3 +144,15 @@ func TestLoadVoiceVerifiedRequiresInstruction(t *testing.T) {
 		t.Fatal("voice without executable instruction was accepted")
 	}
 }
+
+func TestLoadVoiceVerifiedAcceptsDeferredName(t *testing.T) {
+	raw := []byte(`{"schema_version":1,"policy_version":"1.0.0","configured":false,"name":"","trigger":"","language":"th","pronoun":"ฉัน","ending":"ค่ะ","instruction":"ใช้ภาษาไทย แทนตัวเองว่า ฉัน และลงท้ายว่า ค่ะ","stores_prompts":false}`)
+	path, hashPath := writeVerifiedFixture(t, "voice.json", raw)
+	voice, err := LoadVoiceVerified(path, hashPath)
+	if err != nil {
+		t.Fatalf("deferred-name voice rejected: %v", err)
+	}
+	if voice.Configured || voice.Name != "" || voice.Trigger != "" {
+		t.Fatalf("deferred-name voice was treated as configured: %#v", voice)
+	}
+}

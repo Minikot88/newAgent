@@ -1,0 +1,25 @@
+{
+  "profiles": {
+    "arin": {
+      "path": ".kimmizo/team/profiles/arin/v001.json",
+      "previous_revisions": [],
+      "revision": 1
+    },
+    "mira": {
+      "path": ".kimmizo/team/profiles/mira/v001.json",
+      "previous_revisions": [],
+      "revision": 1
+    },
+    "nami": {
+      "path": ".kimmizo/team/profiles/nami/v001.json",
+      "previous_revisions": [],
+      "revision": 1
+    },
+    "vera": {
+      "path": ".kimmizo/team/profiles/vera/v001.json",
+      "previous_revisions": [],
+      "revision": 1
+    }
+  },
+  "schema_version": 1
+}

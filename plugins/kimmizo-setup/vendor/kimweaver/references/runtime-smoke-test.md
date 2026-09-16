@@ -37,7 +37,7 @@ Global installation is outside Phase A. After an authorized global install, open
 
 ## Canary Set
 
-1. **KIM-CANARY-01 — greeting and voice gate:** run a greeting-only `เลขาคิม` task with `solo` / `standard`; verify a concise `ฉัน`/`ค่ะ` reply, no memory payload, an `enforced` proxy receipt when pre-turn injection exists, and an unrelated Auto control that receives no secretary context.
+1. **KIM-CANARY-01 — greeting and voice gate:** after the user configures a name, run a greeting-only named-assistant task with `solo` / `standard`; verify a concise `ฉัน`/`ค่ะ` reply, no memory payload, an `enforced` proxy receipt when pre-turn injection exists, and an unrelated Auto control that receives no secretary context.
 2. **KIM-CANARY-02 — Terra judgment lane:** run a bounded complex or judgment-heavy task through the Terra lane. Verify `fork_turns="none"`, a complete redacted packet, disjoint ownership, actual artifact inspection, and the worker return schema.
 3. **KIM-CANARY-03 — Luna mechanical lane:** run a bounded narrow or mechanical task through the Luna lane. Verify the same packet, ownership, inspection, and return-schema controls for that lane.
 4. **KIM-CANARY-04 — personal context boundary:** run a task that needs personal context and verify that it remains parent-owned, is redacted from any worker packet, and is not persisted or transmitted without the required approval.

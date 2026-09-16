@@ -1,77 +1,24 @@
-# ตรวจรับบน Mac
+# ตรวจรับ Kimmizo Auto บน Mac
 
-รัน checklist นี้หลังติดตั้งและปิด/เปิด Codex ใหม่แล้ว
+## Runtime
 
-## 1. ตรวจสถานะ runtime
+รัน `./status.sh` ต้องได้ exit code `0` และยืนยัน:
 
-```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
-./status.sh
-```
+- `status` เป็น `ready`
+- `hostOs` เป็น `darwin` และ `hostArch` เป็น `arm64`
+- `policyVerified`, `voiceVerified`, `realCliExecutable` และ `outboundModelGuard` เป็น `true`
+- `storesPrompts` และ `secretsCopied` เป็น `false`
+- LaunchAgent และ `CODEX_CLI_PATH` active
+- `✦ Auto` อยู่ใน installed local catalog
 
-ต้องเห็น JSON ที่มีค่าหลักดังนี้:
+## Routing จริง
 
-```json
-{
-  "status": "ready",
-  "virtualModel": "athena-auto",
-  "displayName": "✦ Auto",
-  "storesPrompts": false,
-  "secretsCopied": false,
-  "policyVerified": true,
-  "voiceVerified": true,
-  "realCliExecutable": true
-}
-```
+เลือก `✦ Auto` แล้วเริ่ม ephemeral/read-only task ระบบต้องส่ง official model slug ที่อยู่ใน catalogเข้า real Codex และต้องไม่ส่ง `athena-auto` ออกไป Outbound guard ต้องปฏิเสธ method ใหม่ที่มี virtual slug ซึ่ง runtime ยังไม่รู้จัก
 
-และต้องมีบรรทัดทั้ง `PASS: LaunchAgent and CODEX_CLI_PATH are active for Kimmizo.` และ `PASS: ✦ Auto is present in the installed Codex model catalog.`
+## บุคลิกและชื่อ
 
-## 2. ตรวจใน Codex UI
+ก่อน verification เสร็จ `nameConfigured` ต้องเป็น `false` หลังผู้ใช้ตอบชื่อแล้วจึงรัน `./name.sh "ชื่อ"`, ปิด Codex ด้วย `Command-Q`, เปิดใหม่ และตรวจ `./status.sh` อีกครั้ง
 
-1. เปิด task ใหม่
-2. เปิดเมนู Model
-3. ยืนยันว่ามี `✦ Auto`
-4. เลือก `✦ Auto`
+## เกณฑ์ผ่าน
 
-## 3. ตรวจบุคลิก
-
-ส่งข้อความ:
-
-```text
-เลขาคิม ช่วยสรุปว่าเธอจะทำงานกับโปรเจกต์นี้อย่างไรแบบสั้น ๆ
-```
-
-ผลที่คาดหวัง: ตอบในบุคลิกผู้หญิง ใช้สรรพนาม `ฉัน` และลงท้ายอย่างสุภาพด้วย `ค่ะ`
-
-## 4. ตรวจ Auto แบบปลอดภัย
-
-ส่งงานอ่านอย่างเดียว เช่น:
-
-```text
-เริ่มงานใหม่: อ่าน README แล้วสรุปสั้น ๆ โดยไม่แก้ไฟล์
-```
-
-จากนั้นรัน `./status.sh` อีกครั้ง ค่า `routeCount` ควรมากกว่า `0`
-
-## ถ้า `✦ Auto` ยังไม่ปรากฏ
-
-1. ตรวจว่าใช้ `Command-Q` ไม่ใช่เพียงปิดหน้าต่าง
-2. รัน `./status.sh` และเก็บ output ทั้งหมด
-3. ตรวจค่า active path:
-
-   ```zsh
-   launchctl getenv CODEX_CLI_PATH
-   ```
-
-   ต้องเป็น `/Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto/kimmizo-desktop-entrypoint`
-
-4. ถ้าสถานะไม่ใช่ `ready` หรือ Model ยังไม่ขึ้น ให้รัน installer ซ้ำจาก root ของ bundle แล้วปิด Codex ด้วย `Command-Q` ก่อนเปิดใหม่:
-
-   ```zsh
-   ./install.sh --name "ชื่อที่เลือก"
-   ./status.sh
-   ```
-
-5. หากยังไม่ขึ้น ให้ส่งเฉพาะ output จาก `./status.sh` และผลของ `launchctl getenv CODEX_CLI_PATH` กลับมา โดยไม่ส่งข้อมูลบัญชีหรือไฟล์ส่วนตัว
-
-สถานะ cross-build จาก Windows เพียงอย่างเดียวไม่ถือว่าผ่านขั้นนี้ ต้องเห็นผลจริงจาก Mac และ UI
+ถือว่าผ่านเมื่อ bundle manifest, unit/integration tests, native self-test, installer, status, real app-server routing และ Codex restart ให้ exit code สำเร็จทั้งหมด ห้ามสรุปจากการเห็นชื่อ `✦ Auto` เพียงอย่างเดียว

@@ -40,6 +40,7 @@ type Policy struct {
 type Voice struct {
 	SchemaVersion int    `json:"schema_version"`
 	PolicyVersion string `json:"policy_version"`
+	Configured    bool   `json:"configured"`
 	Name          string `json:"name"`
 	Trigger       string `json:"trigger"`
 	Language      string `json:"language"`
@@ -105,7 +106,16 @@ func LoadVoiceVerified(path, hashPath string) (Voice, error) {
 	if voice.SchemaVersion != SchemaVersion {
 		return Voice{}, fmt.Errorf("unsupported voice schema %d", voice.SchemaVersion)
 	}
-	if strings.TrimSpace(voice.PolicyVersion) == "" || voice.Name != "อาเทน่า" || voice.Trigger != "อาเทน่า" || voice.Language != "th" || voice.Pronoun != "ฉัน" || voice.Ending != "ค่ะ" || strings.TrimSpace(voice.Instruction) == "" || voice.StoresPrompts {
+	if strings.TrimSpace(voice.Name) != "" || strings.TrimSpace(voice.Trigger) != "" {
+		voice.Configured = true
+	}
+	if strings.TrimSpace(voice.PolicyVersion) == "" || voice.Language != "th" || voice.Pronoun != "ฉัน" || voice.Ending != "ค่ะ" || strings.TrimSpace(voice.Instruction) == "" || voice.StoresPrompts {
+		return Voice{}, errors.New("voice contract mismatch")
+	}
+	if voice.Configured && (strings.TrimSpace(voice.Name) == "" || strings.TrimSpace(voice.Trigger) == "") {
+		return Voice{}, errors.New("voice contract mismatch")
+	}
+	if !voice.Configured && (strings.TrimSpace(voice.Name) != "" || strings.TrimSpace(voice.Trigger) != "") {
 		return Voice{}, errors.New("voice contract mismatch")
 	}
 	return voice, nil

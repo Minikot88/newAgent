@@ -421,6 +421,30 @@ def test_doctor_plans_installable_tier0_prerequisite(kimmizo, tmp_path, monkeypa
     assert "git" in result["missing_tier0"]
 
 
+def test_doctor_accepts_python3_on_non_windows_hosts(kimmizo, tmp_path, monkeypatch):
+    home, config = fake_machine(tmp_path)
+    real_which = kimmizo.shutil.which
+
+    def python3_only(command):
+        if command in {"python", "py"}:
+            return None
+        if command == "python3":
+            return "/opt/homebrew/bin/python3"
+        return real_which(command)
+
+    monkeypatch.setattr(kimmizo.shutil, "which", python3_only)
+    monkeypatch.setattr(kimmizo.platform, "system", lambda: "Darwin")
+    monkeypatch.setattr(kimmizo, "_codex_features", lambda: {"multi_agent": True, "plugins": True})
+
+    result = kimmizo.doctor(
+        tmp_path / "project", home=home, codex_config=config, host_plugins={}
+    )
+
+    python = next(item for item in result["capabilities"] if item["id"] == "python")
+    assert python["state"] == "installed"
+    assert "python" not in result["missing_tier0"]
+
+
 def test_doctor_uses_host_active_version_not_any_cached_version(kimmizo, tmp_path):
     home, config = fake_machine(tmp_path)
     manifest = (
@@ -545,10 +569,17 @@ def test_setup_preserves_user_files_and_creates_project_capsule(kimmizo, tmp_pat
     assert "Kimmizo Auto host extension" in agents_text
     assert "Launcher แยก" in agents_text
     assert "ให้บอสเลือกใน Codex" in agents_text
-    assert "คิมเลือก Model/Reasoning ของลูกน้องอัตโนมัติ" in agents_text
+    assert "ผู้ช่วยเลือก Model/Reasoning ของลูกน้องอัตโนมัติ" in agents_text
     assert "ก่อนเริ่มงานแต่ละส่วน" in agents_text
     assert "ห้ามเดาชื่อโมเดล" in agents_text
     assert "แจ้งชื่อ Agent, Model และ Reasoning ก่อน spawn" in agents_text
+    assert "เลขาคิม" not in agents_text
+    assert "แทนตัวเองว่า “คิม”" not in agents_text
+    secretary_skill = (
+        project / ".agents" / "skills" / "kimmizo-secretary" / "SKILL.md"
+    ).read_text(encoding="utf-8")
+    assert "เลขาคิม" not in secretary_skill
+    assert "Refer to yourself as **คิม**" not in secretary_skill
 
 
 def test_setup_blocks_when_tier0_prerequisite_is_missing(kimmizo, tmp_path, monkeypatch):

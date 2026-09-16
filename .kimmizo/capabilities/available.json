@@ -1,0 +1,484 @@
+{
+  "approval_required": [
+    "github",
+    "data-analytics",
+    "codex-security"
+  ],
+  "approved_capabilities": [],
+  "capabilities": [
+    {
+      "id": "multi-agent",
+      "kind": "host_feature",
+      "observed_versions": [],
+      "state": "available",
+      "tier": 0
+    },
+    {
+      "id": "skill-discovery",
+      "kind": "host_feature",
+      "observed_versions": [],
+      "state": "available",
+      "tier": 0
+    },
+    {
+      "id": "skill-installer",
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "skill-creator",
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "plugin-creator",
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "openai-docs",
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "imagegen",
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "git",
+      "kind": "cli",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "python",
+      "kind": "cli",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 0
+    },
+    {
+      "id": "model-catalog",
+      "kind": "host_feature",
+      "observed_versions": [],
+      "state": "configured",
+      "tier": 0
+    },
+    {
+      "id": "superpowers",
+      "kind": "plugin",
+      "observed_versions": [
+        "6.3.0"
+      ],
+      "selector": "superpowers@openai-curated",
+      "state": "missing",
+      "tier": 1
+    },
+    {
+      "id": "grill-me",
+      "integrity": {
+        "expected_sha256": "6189dfceb7304a6e5558f75d87e68fa3bc7fcf7ba120e44f21f8a61fe01eba54",
+        "observed_sha256": {
+          "/Users/alongkot/.agents/skills/grill-me/SKILL.md": "6189dfceb7304a6e5558f75d87e68fa3bc7fcf7ba120e44f21f8a61fe01eba54"
+        },
+        "verified_paths": [
+          "/Users/alongkot/.agents/skills/grill-me/SKILL.md"
+        ]
+      },
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 1
+    },
+    {
+      "id": "adhd",
+      "integrity": {
+        "expected_sha256": "06debe68a370206acd93e0b2ee54d6395bc367fdfbc079f2348e3ce2966dac0a",
+        "observed_sha256": {
+          "/Users/alongkot/.agents/skills/adhd/SKILL.md": "06debe68a370206acd93e0b2ee54d6395bc367fdfbc079f2348e3ce2966dac0a"
+        },
+        "verified_paths": [
+          "/Users/alongkot/.agents/skills/adhd/SKILL.md"
+        ]
+      },
+      "kind": "skill",
+      "observed_versions": [],
+      "state": "installed",
+      "tier": 1
+    },
+    {
+      "id": "browser",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.908.70816"
+      ],
+      "selector": "browser@openai-bundled",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "chrome",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.908.70816"
+      ],
+      "selector": "chrome@openai-bundled",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "computer-use",
+      "kind": "plugin",
+      "observed_versions": [
+        "1.0.1001067"
+      ],
+      "selector": "computer-use@openai-bundled",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "documents",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.909.11814"
+      ],
+      "selector": "documents@openai-primary-runtime",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "pdf",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.909.11814"
+      ],
+      "selector": "pdf@openai-primary-runtime",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "spreadsheets",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.909.11814"
+      ],
+      "selector": "spreadsheets@openai-primary-runtime",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "presentations",
+      "kind": "plugin",
+      "observed_versions": [
+        "26.909.11814"
+      ],
+      "selector": "presentations@openai-primary-runtime",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "visualize",
+      "kind": "plugin",
+      "observed_versions": [
+        "1.0.37"
+      ],
+      "selector": "visualize@openai-bundled",
+      "state": "enabled",
+      "tier": 1
+    },
+    {
+      "id": "github",
+      "kind": "plugin",
+      "observed_versions": [
+        "0.1.12-5f7cd798dc99",
+        "0.1.11"
+      ],
+      "selector": "github@openai-curated",
+      "state": "missing",
+      "tier": 1
+    },
+    {
+      "id": "data-analytics",
+      "kind": "plugin",
+      "observed_versions": [
+        "1.0.8",
+        "0.2.8"
+      ],
+      "selector": "data-analytics@openai-curated",
+      "state": "cached_only",
+      "tier": 1
+    },
+    {
+      "id": "codex-security",
+      "kind": "plugin",
+      "observed_versions": [
+        "0.1.24",
+        "0.1.22"
+      ],
+      "selector": "codex-security@openai-curated",
+      "state": "cached_only",
+      "tier": 1
+    },
+    {
+      "id": "agent-browser",
+      "kind": "skill_cli",
+      "observed_versions": [],
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "sites",
+      "kind": "plugin",
+      "observed_versions": [
+        "0.1.70"
+      ],
+      "selector": "sites@openai-bundled",
+      "state": "version_drift",
+      "tier": 2,
+      "version_lock": {
+        "expected": "0.1.27",
+        "matched": [],
+        "observed": [
+          "0.1.70"
+        ]
+      }
+    },
+    {
+      "id": "build-web-apps",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "build-web-apps@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "supabase",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "supabase@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "vercel",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "vercel@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "figma",
+      "kind": "plugin",
+      "observed_versions": [
+        "2.0.21"
+      ],
+      "selector": "figma@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "canva",
+      "kind": "plugin",
+      "observed_versions": [
+        "15.0.0"
+      ],
+      "selector": "canva@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "heygen",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "heygen@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "openai-developers",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "openai-developers@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "codex-reviewer",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "codex-reviewer@awesome-codex-plugins",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "neon-postgres",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "neon-postgres@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "cloudflare",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "cloudflare@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "sentry",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "sentry@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "datadog",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "datadog@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "remotion",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "remotion@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "google-drive",
+      "kind": "plugin",
+      "observed_versions": [
+        "0.1.16"
+      ],
+      "selector": "google-drive@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "notion",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "notion@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "gmail",
+      "kind": "plugin",
+      "observed_versions": [
+        "0.1.10"
+      ],
+      "selector": "gmail@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "slack",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "slack@openai-curated",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "codebase-recon",
+      "kind": "plugin",
+      "observed_versions": [],
+      "selector": "codebase-recon@awesome-codex-plugins",
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "domain-trading",
+      "kind": "domain_policy",
+      "observed_versions": [],
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "domain-content",
+      "kind": "domain_policy",
+      "observed_versions": [],
+      "state": "missing",
+      "tier": 2
+    },
+    {
+      "id": "domain-finance",
+      "kind": "domain_policy",
+      "observed_versions": [],
+      "state": "missing",
+      "tier": 2
+    }
+  ],
+  "conflicts": [],
+  "install_plan": [
+    {
+      "action": "auto_install",
+      "current_state": "missing",
+      "id": "superpowers",
+      "restart": false
+    },
+    {
+      "action": "request_system_approval",
+      "current_state": "missing",
+      "id": "github",
+      "restart": false
+    },
+    {
+      "action": "request_system_approval",
+      "current_state": "cached_only",
+      "id": "data-analytics",
+      "restart": false
+    },
+    {
+      "action": "request_system_approval",
+      "current_state": "cached_only",
+      "id": "codex-security",
+      "restart": false
+    }
+  ],
+  "policy_guards": [
+    {
+      "action": "disable_implicit_routing",
+      "id": "implicit-using-superpowers",
+      "reason": "Load only the workflow subskill needed for the current task."
+    },
+    {
+      "action": "disable_unless_benchmarked",
+      "id": "duplicate-context-manager",
+      "reason": "Avoid duplicate checkpoint systems and context growth."
+    },
+    {
+      "action": "block",
+      "id": "untrusted-install",
+      "reason": "Unknown or unpinned sources may not be installed automatically."
+    },
+    {
+      "action": "require_boss_approval",
+      "id": "authority-change",
+      "reason": "New authority requires an explicit system approval."
+    }
+  ],
+  "schema_version": 1,
+  "setup_version": "1.0.0",
+  "status": "attention"
+}

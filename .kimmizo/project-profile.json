@@ -1,0 +1,18 @@
+{
+  "domains": [],
+  "git_commit_count": 3,
+  "git_repository": true,
+  "language_file_counts": {
+    "dotnet": 4,
+    "go": 11,
+    "python": 27
+  },
+  "languages": [
+    "python",
+    "go",
+    "dotnet"
+  ],
+  "name": "newAgent",
+  "schema_version": 1,
+  "tier2_recommendations": []
+}

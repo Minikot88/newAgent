@@ -8,31 +8,30 @@ SOURCE_BINARY="$BUNDLE_DIR/bin/darwin-arm64/kimmizo-auto"
 SOURCE_ENTRYPOINT="$SOURCE_ROOT/kimmizo-desktop-entrypoint"
 SOURCE_LAUNCHER="$SOURCE_ROOT/kimmizo-real-codex"
 SOURCE_CATALOG="$SOURCE_ROOT/model-catalog.json"
+SOURCE_SKILL="$BUNDLE_DIR/skills/kimmizo/SKILL.md"
 INSTALL_PARENT="$HOME/.kimmizo-secretary"
 INSTALL_ROOT="$INSTALL_PARENT/auto"
 NATIVE_PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
 PROXY_PATH="$INSTALL_ROOT/kimmizo-desktop-entrypoint"
 LABEL="com.kimmizo.kimmizo-auto"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
+SKILL_DIR="$HOME/.codex/skills/kimmizo"
+SKILL_TARGET="$SKILL_DIR/SKILL.md"
 STAGE_ROOT=""
 ROOT_BACKUP=""
 AGENT_TEMP=""
 AGENT_BACKUP=""
+SKILL_TEMP=""
+SKILL_BACKUP=""
 REAL_CODEX=""
 DEFAULT_AUTO="on"
-SECRETARY_NAME="เลขาคิม"
 
 usage() {
-  print -r -- "Usage: ./install.sh [--name name] [--real-codex /absolute/path] [--default-auto on|off]"
+  print -r -- "Usage: ./install.sh [--real-codex /absolute/path] [--default-auto on|off]"
 }
 
 while (( $# > 0 )); do
   case "$1" in
-    --name)
-      (( $# >= 2 )) || { usage >&2; exit 64; }
-      SECRETARY_NAME="$2"
-      shift 2
-      ;;
     --real-codex)
       (( $# >= 2 )) || { usage >&2; exit 64; }
       REAL_CODEX="$2"
@@ -55,17 +54,6 @@ while (( $# > 0 )); do
   esac
 done
 
-if [[ -t 0 && -z "${KIMMIZO_NAME_NONINTERACTIVE:-}" && "$SECRETARY_NAME" == "เลขาคิม" ]]; then
-  print -n -- "ชื่อเลขาคิมที่ต้องการใช้ [เลขาคิม]: "
-  read -r entered_name
-  [[ -n "$entered_name" ]] && SECRETARY_NAME="$entered_name"
-fi
-
-[[ -n "$SECRETARY_NAME" && ${#SECRETARY_NAME} -le 80 && "$SECRETARY_NAME" != */* ]] || {
-  print -u2 -r -- "ชื่อไม่ถูกต้อง: ต้องไม่ว่าง ไม่เกิน 80 ตัวอักษร และห้ามมี /"
-  exit 64
-}
-
 [[ "$DEFAULT_AUTO" == "on" || "$DEFAULT_AUTO" == "off" ]] || {
   print -u2 -r -- "--default-auto must be on or off"
   exit 64
@@ -83,6 +71,10 @@ fi
   print -u2 -r -- "Missing binary: $SOURCE_BINARY"
   exit 66
 }
+[[ -f "$SOURCE_SKILL" ]] || {
+  print -u2 -r -- "Missing skill: $SOURCE_SKILL"
+  exit 66
+}
 for required in kimmizo-desktop-entrypoint kimmizo-real-codex model-catalog.json model-policy.json model-policy.sha256 voice-bootstrap.json voice-bootstrap.sha256; do
   [[ -f "$SOURCE_ROOT/$required" ]] || {
     print -u2 -r -- "Missing runtime file: $required"
@@ -95,7 +87,7 @@ done
 }
 (cd "$BUNDLE_DIR" && /usr/bin/shasum -a 256 -c BUNDLE-MANIFEST.sha256 >/dev/null)
 
-/bin/mkdir -p "$INSTALL_PARENT" "$HOME/Library/LaunchAgents"
+/bin/mkdir -p "$INSTALL_PARENT" "$HOME/Library/LaunchAgents" "$SKILL_DIR"
 /bin/chmod 700 "$INSTALL_PARENT"
 
 ACTIVE_CLI="$(/bin/launchctl getenv CODEX_CLI_PATH 2>/dev/null || true)"
@@ -189,9 +181,11 @@ STAGE_ROOT="$(/usr/bin/mktemp -d "$INSTALL_PARENT/.auto-stage.XXXXXX")"
 ROOT_BACKUP="$INSTALL_PARENT/.auto-backup.$$.${RANDOM}"
 AGENT_TEMP="$(/usr/bin/mktemp "$HOME/Library/LaunchAgents/.$LABEL.tmp.XXXXXX")"
 AGENT_BACKUP="$HOME/Library/LaunchAgents/.$LABEL.backup.$$.${RANDOM}.plist"
-[[ ! -e "$ROOT_BACKUP" && ! -e "$AGENT_BACKUP" ]] || {
+SKILL_TEMP="$(/usr/bin/mktemp "$SKILL_DIR/.SKILL.md.tmp.XXXXXX")"
+SKILL_BACKUP="$SKILL_DIR/.SKILL.md.backup.$$.${RANDOM}"
+[[ ! -e "$ROOT_BACKUP" && ! -e "$AGENT_BACKUP" && ! -e "$SKILL_BACKUP" ]] || {
   /bin/rm -R "$STAGE_ROOT"
-  /bin/rm -f "$AGENT_TEMP"
+  /bin/rm -f "$AGENT_TEMP" "$SKILL_TEMP"
   print -u2 -r -- "Could not allocate safe backup paths."
   exit 73
 }
@@ -201,6 +195,8 @@ ROOT_REPLACED=0
 ROOT_WAS_BACKED_UP=0
 AGENT_WAS_BACKED_UP=0
 NEW_AGENT_INSTALLED=0
+SKILL_INSTALLED=0
+SKILL_WAS_BACKED_UP=0
 
 restore_launch_environment() {
   if [[ -n "$ORIGINAL_ACTIVE_CLI" ]]; then
@@ -222,6 +218,12 @@ rollback() {
       /bin/mv "$AGENT_BACKUP" "$LAUNCH_AGENT"
       /bin/launchctl bootstrap "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
     fi
+    if (( SKILL_INSTALLED == 1 )) && [[ -f "$SKILL_TARGET" ]]; then
+      /bin/rm -f "$SKILL_TARGET"
+    fi
+    if (( SKILL_WAS_BACKED_UP == 1 )) && [[ -f "$SKILL_BACKUP" ]]; then
+      /bin/mv "$SKILL_BACKUP" "$SKILL_TARGET"
+    fi
     if (( ROOT_REPLACED == 1 )) && [[ -d "$INSTALL_ROOT" ]]; then
       /bin/rm -R "$INSTALL_ROOT"
     fi
@@ -230,6 +232,7 @@ rollback() {
     fi
     [[ -n "$STAGE_ROOT" && -d "$STAGE_ROOT" ]] && /bin/rm -R "$STAGE_ROOT"
     [[ -n "$AGENT_TEMP" && -f "$AGENT_TEMP" ]] && /bin/rm -f "$AGENT_TEMP"
+    [[ -n "$SKILL_TEMP" && -f "$SKILL_TEMP" ]] && /bin/rm -f "$SKILL_TEMP"
     restore_launch_environment
     print -u2 -r -- "Kimmizo installation failed and completed rollback."
   fi
@@ -248,6 +251,8 @@ trap 'exit 143' TERM
 /bin/cp "$SOURCE_ROOT/voice-bootstrap.json" "$STAGE_ROOT/voice-bootstrap.json"
 /bin/cp "$SOURCE_ROOT/voice-bootstrap.sha256" "$STAGE_ROOT/voice-bootstrap.sha256"
 /bin/cp "$BUNDLE_DIR/KIMMIZO_SECRETARY_PORTABLE_SPEC.md" "$STAGE_ROOT/KIMMIZO_SECRETARY_PORTABLE_SPEC.md"
+/bin/cp "$SOURCE_SKILL" "$SKILL_TEMP"
+/bin/chmod 644 "$SKILL_TEMP"
 if [[ $MANAGED_EXISTING -eq 1 && -f "$INSTALL_ROOT/state.json" ]]; then
   /bin/cp "$INSTALL_ROOT/state.json" "$STAGE_ROOT/state.json"
 fi
@@ -260,10 +265,12 @@ print -r -- "$STAGE_ROOT/kimmizo-real-codex" > "$STAGE_ROOT/real-codex.path"
 RECEIPT="$STAGE_ROOT/install.json"
 /usr/bin/plutil -create xml1 "$RECEIPT"
 /usr/bin/plutil -insert schemaVersion -integer 1 "$RECEIPT"
-/usr/bin/plutil -insert secretaryName -string "$SECRETARY_NAME" "$RECEIPT"
+/usr/bin/plutil -insert nameConfigured -bool NO "$RECEIPT"
 /usr/bin/plutil -insert Label -string "$LABEL" "$RECEIPT"
 /usr/bin/plutil -insert installRoot -string "$INSTALL_ROOT" "$RECEIPT"
 /usr/bin/plutil -insert proxyPath -string "$PROXY_PATH" "$RECEIPT"
+/usr/bin/plutil -insert skillPath -string "$SKILL_TARGET" "$RECEIPT"
+/usr/bin/plutil -insert skillSha256 -string "$(/usr/bin/shasum -a 256 "$SOURCE_SKILL" | /usr/bin/awk '{print $1}')" "$RECEIPT"
 /usr/bin/plutil -insert previousCodexCliPath -string "$PREVIOUS_CLI" "$RECEIPT"
 /usr/bin/plutil -insert installedAtUtc -string "$(/bin/date -u +'%Y-%m-%dT%H:%M:%SZ')" "$RECEIPT"
 /usr/bin/plutil -convert json "$RECEIPT"
@@ -288,6 +295,10 @@ if [[ -f "$LAUNCH_AGENT" ]]; then
   AGENT_WAS_BACKED_UP=1
   /bin/launchctl bootout "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
 fi
+if [[ -f "$SKILL_TARGET" ]]; then
+  /bin/cp "$SKILL_TARGET" "$SKILL_BACKUP"
+  SKILL_WAS_BACKED_UP=1
+fi
 if [[ -d "$INSTALL_ROOT" ]]; then
   /bin/mv "$INSTALL_ROOT" "$ROOT_BACKUP"
   ROOT_WAS_BACKED_UP=1
@@ -296,6 +307,8 @@ fi
 ROOT_REPLACED=1
 /bin/mv "$AGENT_TEMP" "$LAUNCH_AGENT"
 NEW_AGENT_INSTALLED=1
+/bin/mv "$SKILL_TEMP" "$SKILL_TARGET"
+SKILL_INSTALLED=1
 /bin/launchctl bootstrap "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
 /bin/launchctl setenv CODEX_CLI_PATH "$PROXY_PATH"
 [[ "$(/bin/launchctl getenv CODEX_CLI_PATH 2>/dev/null || true)" == "$PROXY_PATH" ]] || {
@@ -314,8 +327,9 @@ SUCCESS=1
 trap - EXIT INT TERM
 [[ -d "$ROOT_BACKUP" ]] && /bin/rm -R "$ROOT_BACKUP" || true
 [[ -f "$AGENT_BACKUP" ]] && /bin/rm -f "$AGENT_BACKUP" || true
+[[ -f "$SKILL_BACKUP" ]] && /bin/rm -f "$SKILL_BACKUP" || true
 
-print -r -- "PASS: $SECRETARY_NAME installed at $INSTALL_ROOT"
+print -r -- "PASS: Kimmizo Auto installed at $INSTALL_ROOT"
 print -r -- "CODEX_CLI_PATH=$PROXY_PATH"
 print -r -- "Quit Codex completely with Command-Q, reopen it, then select ✦ Auto."
 print -r -- "Run ./status.sh after reopening Codex."

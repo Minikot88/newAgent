@@ -1,44 +1,7 @@
 คำสั่งเริ่มต้นสำหรับเครื่องใหม่
 
-ให้ดำเนินการติดตั้งและตรวจสอบระบบผู้ช่วยในโฟลเดอร์ Project ปัจจุบันให้ครบทุกขั้นตอน โดยลงมือทำจริง ไม่ใช่เพียงอธิบายวิธี
+ให้ติดตั้งและตรวจสอบระบบผู้ช่วยจาก Project ปัจจุบันตาม README.md โดยลงมือทำจริง ห้ามใช้ Git ห้ามอ่านหรือเปิดเผย secrets และห้ามแก้ไฟล์นอก Project กับ installation roots ที่คู่มือระบุ
 
-กติกาความปลอดภัย:
-1. อ่าน README.md และคู่มือที่เกี่ยวข้องก่อนเริ่ม
-2. ตรวจระบบปฏิบัติการและสถาปัตยกรรมของเครื่องก่อนเลือกคำสั่ง
-3. ห้ามใช้หรือสร้าง Git repository และห้ามคัดลอกโฟลเดอร์ .git, .worktrees หรือ cache ไปที่อื่น
-4. ห้ามอ่าน คัดลอก แสดง หรือส่งต่อ secrets, token, private key, password, connection string หรือไฟล์ .env
-5. ห้ามแก้ไขไฟล์นอกขอบเขต Project และโฟลเดอร์ติดตั้งที่คู่มือระบุ
-6. ห้ามรายงานว่าสำเร็จจนกว่าจะมีผลลัพธ์จริงและ exit code สำเร็จ
+บน macOS Apple Silicon ให้ตรวจ manifest, รัน installer, status, tests, native self-test และ real app-server routing จากนั้นปิด Codex ด้วย Command-Q แล้วเปิดใหม่ ตรวจว่า `✦ Auto` ปรากฏและทุก outbound request ถูกแทนด้วย official model ก่อนถึง real Codex
 
-ถ้าเป็น Windows:
-1. ยืนยันว่าโฟลเดอร์ปัจจุบันคือ KIMMIZO_WINDOWS_COMPLETE_BUNDLE
-2. เปิด PowerShell และรัน:
-   Set-ExecutionPolicy -Scope Process Bypass
-   .\install.ps1 -Target (Get-Location).Path
-3. ตรวจ Auto:
-   .\install.ps1 -Mode auto-status
-
-ถ้าเป็น macOS Apple Silicon:
-1. ยืนยันว่าเครื่องเป็น macOS arm64 และโฟลเดอร์ปัจจุบันคือ KIMMIZO_MAC_COMPLETE_BUNDLE
-2. รัน:
-   chmod +x install.sh status.sh uninstall.sh
-   ./install.sh
-3. ทำตามคำถามของตัวติดตั้งให้ครบ
-4. ตรวจสถานะ:
-   ./status.sh
-5. ปิด Codex ด้วย Command-Q แล้วเปิดใหม่
-6. ตรวจว่าโมเดล ✦ Auto ปรากฏในเมนู Model และเลือกใช้งานได้
-
-หลังติดตั้ง:
-1. ตรวจไฟล์ policy, voice policy, skills, plugins, project capsule และ Auto runtime
-2. รัน doctor หรือ verification ที่มีในคู่มือ
-3. หากพบปัญหา ให้หาสาเหตุ แก้เฉพาะไฟล์ในขอบเขต และตรวจซ้ำ
-4. สรุปสิ่งที่ผ่าน สิ่งที่ไม่ผ่าน คำสั่งที่รัน และ exit code โดยไม่เปิดเผยข้อมูลลับ
-
-สำคัญที่สุด:
-- ห้ามถามชื่อตอนเริ่มงาน
-- ห้ามตั้งชื่อเองระหว่างติดตั้ง
-- ให้ติดตั้งและตรวจสอบทุกอย่างจนเสร็จก่อน
-- หลังทุกอย่างผ่านแล้วเท่านั้น ให้ถามเป็นคำถามสุดท้ายว่า:
-  “ต้องการตั้งชื่อผู้ช่วยว่าอะไรคะ?”
-- ห้ามตั้งชื่อเองก่อนผู้ใช้ตอบ
+ห้ามถามหรือตั้งชื่อระหว่างติดตั้ง หลังทุก verification ผ่านและ exit code สำเร็จแล้วเท่านั้น ให้ถามว่า “ต้องการตั้งชื่อผู้ช่วยว่าอะไรคะ?” และรอคำตอบก่อนรัน `./name.sh "ชื่อที่ผู้ใช้ตอบ"`

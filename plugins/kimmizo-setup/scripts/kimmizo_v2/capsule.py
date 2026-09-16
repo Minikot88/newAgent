@@ -321,6 +321,7 @@ def _voice_bootstrap(policy_path: Path) -> tuple[bytes, str]:
         "schemaVersion": policy["schema_version"],
         "policyVersion": policy["policy_version"],
         "policySha256": _sha256_bytes(raw),
+        "configured": bool(voice.get("configured", True)),
         "trigger": voice["trigger"],
         "pronoun": voice["pronoun"],
         "suffix": voice["suffix"],
@@ -669,6 +670,8 @@ def _validate_payload(
         or sidecar.get("schemaVersion") != policy_schema
         or sidecar.get("policyVersion") != policy_version
         or sidecar.get("policySha256") != manifest["policy_sha256"]
+        or not isinstance(sidecar.get("configured"), bool)
+        or sidecar.get("configured") != bool(policy_voice.get("configured", True))
         or not all(
             isinstance(sidecar.get(key), str) and sidecar[key]
             for key in ("trigger", "pronoun", "suffix", "instruction", "blockedMessage")

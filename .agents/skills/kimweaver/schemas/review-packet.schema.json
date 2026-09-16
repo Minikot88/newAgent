@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimmizo.local/schemas/kimweaver/review-packet-v2",
+  "title": "Kimweaver ReviewPacket v2",
+  "schema_version": 2,
+  "type": "object",
+  "required": ["attempt_id", "reservation_state", "candidate_identity", "acceptance", "parent_evidence", "review_budget", "gaps", "user_authorization_state"],
+  "properties": {
+    "attempt_id": {"type": "string", "minLength": 1},
+    "reservation_state": {"const": "reserved"},
+    "candidate_identity": {"type": "object"},
+    "acceptance": {"type": "array", "items": {"type": "string"}},
+    "parent_evidence": {"type": "array", "items": {"type": "string"}},
+    "review_budget": {
+      "type": "object",
+      "required": ["target", "max", "used"],
+      "properties": {
+        "target": {"type": "integer", "minimum": 0},
+        "max": {"type": "integer", "minimum": 0},
+        "used": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "gaps": {"type": "array", "items": {"type": "string"}},
+    "user_authorization_state": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

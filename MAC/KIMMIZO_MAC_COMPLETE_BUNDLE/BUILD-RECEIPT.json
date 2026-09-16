@@ -1,27 +1,29 @@
 {
   "schemaVersion": 1,
   "bundle": "KIMMIZO_MAC_COMPLETE_BUNDLE",
-  "version": "1.0.0",
-  "builtAtUtc": "2026-09-14T11:59:13Z",
-  "buildHost": "windows/amd64",
+  "version": "1.1.0",
+  "builtAtUtc": "2026-09-16T06:28:15Z",
+  "buildHost": "darwin/arm64",
   "target": "darwin/arm64",
   "goVersion": "go1.27.1",
-  "goToolchainSource": "https://go.dev/dl/go1.27.1.windows-amd64.zip",
-  "goToolchainArchiveSha256": "a3911b5e0e1b1053f25ed0675f4c1c6aad1e2bfcf253df2b9be4caabd2edd95d",
+  "goToolchainSource": "https://go.dev/dl/go1.27.1.darwin-arm64.tar.gz",
+  "goToolchainArchiveSha256": "ee215d57e0ec269c60cc9ceca68e6bda321ba9ee5afe24f4b0988703c2d87d12",
   "cgoEnabled": false,
   "buildFlags": ["-trimpath", "-ldflags=-s -w"],
   "artifact": {
     "path": "bin/darwin-arm64/kimmizo-auto",
-    "sizeBytes": 2902610,
-    "sha256": "62f012cb21235a479cd9a54869378c54216dce505c905c54a6e34deb066fff65",
+    "sizeBytes": 2919154,
+    "sha256": "cdc47fb01c07fdd6dfd6d1cde0b01a4099123274c435cbb6dfd9fd997a067000",
     "machoHeader": "cffaedfe0c0000010000000002000000"
   },
   "verification": {
-    "goTestsOnBuildHost": "29 passed",
+    "goTestsOnBuildHost": "33 passed",
     "goVetOnBuildHost": "passed",
+    "shellTestsOnMac": "6 passed",
+    "realAppServerAutoE2E": "passed before and after Codex restart",
     "raceDetector": "not run: the Windows build host has no C compiler; target uses CGO_ENABLED=0",
     "installerSafetyContracts": "passed",
     "shellSyntaxWithBashParser": "passed",
-    "liveMacAcceptance": "pending"
+    "liveMacAcceptance": "passed"
   }
 }

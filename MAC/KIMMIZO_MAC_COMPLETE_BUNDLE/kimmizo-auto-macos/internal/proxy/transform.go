@@ -39,6 +39,9 @@ type Transformer struct {
 }
 
 func NewTransformer(p policy.Policy, voice policy.Voice, store *state.Store) *Transformer {
+	if strings.TrimSpace(voice.Name) != "" && strings.TrimSpace(voice.Trigger) != "" {
+		voice.Configured = true
+	}
 	return &Transformer{
 		policy:  p,
 		voice:   voice,
@@ -93,23 +96,26 @@ func (t *Transformer) ClientLine(line []byte) (forward, immediate []byte, err er
 		}
 		value := pendingRequest{method: method}
 		pending = &value
-	case "thread/start":
+	case "thread/start", "thread/resume", "thread/fork":
 		if params != nil {
 			requested, _ := params["model"].(string)
-			auto := isVirtual(requested) || (strings.TrimSpace(requested) == "" && t.state.DefaultAuto())
+			threadID := stringValue(params["threadId"])
+			auto := isVirtual(requested) || (strings.TrimSpace(requested) == "" && (t.state.DefaultAuto() || t.state.IsAuto(threadID)))
 			value := pendingRequest{method: method, autoStart: auto}
 			if auto {
-				route, routeErr := t.chooseAdaptive("", "")
+				route, routeErr := t.chooseAdaptive(threadID, "")
 				if routeErr != nil {
 					return nil, rpcError(id, codeModelInvalid, "ยังตรวจสอบ Model จาก Catalog ของ Codex ไม่สำเร็จ จึงไม่เริ่มงานค่ะ"), nil
 				}
 				params["model"] = route.Model
-				config, _ := params["config"].(map[string]any)
-				if config == nil {
-					config = make(map[string]any)
-					params["config"] = config
+				if method != "thread/resume" {
+					config, _ := params["config"].(map[string]any)
+					if config == nil {
+						config = make(map[string]any)
+						params["config"] = config
+					}
+					config["model_reasoning_effort"] = route.Effort
 				}
-				config["model_reasoning_effort"] = route.Effort
 				value.startRoute = route
 				changed = true
 			}
@@ -143,7 +149,7 @@ func (t *Transformer) ClientLine(line []byte) (forward, immediate []byte, err er
 			auto := isVirtual(stringValue(params["model"])) || t.state.IsAuto(threadID)
 			if auto {
 				taskText := extractTaskText(params["input"])
-				secretary := t.state.IsSecretary(threadID) || strings.Contains(strings.ToLower(taskText), strings.ToLower(t.voice.Trigger))
+				secretary := t.voice.Configured && (t.state.IsSecretary(threadID) || strings.Contains(strings.ToLower(taskText), strings.ToLower(t.voice.Trigger)))
 				if secretary {
 					if !t.injectVoice(params) {
 						return nil, rpcError(id, codeVoiceInvalid, "ยังตรวจสอบ voice bootstrap ของอาเทน่าไม่สำเร็จ จึงไม่เริ่มงานค่ะ"), nil
@@ -187,9 +193,15 @@ func (t *Transformer) ClientLine(line []byte) (forward, immediate []byte, err er
 		}
 		value := pendingRequest{method: method}
 		pending = &value
-	case "thread/read", "thread/list", "thread/resume":
+	case "thread/read", "thread/list":
 		value := pendingRequest{method: method}
 		pending = &value
+	}
+	if hasVirtualModelField(message) {
+		if hasID {
+			return nil, rpcError(id, codeModelInvalid, "Auto ไม่ส่งชื่อโมเดลเสมือนไปยัง Codex กรุณาลองเริ่มงานใหม่ค่ะ"), nil
+		}
+		return nil, nil, errors.New("virtual model blocked before forwarding to real Codex")
 	}
 
 	if pending != nil && hasID {
@@ -233,7 +245,7 @@ func (t *Transformer) ServerLine(line []byte) ([]byte, error) {
 					changed = true
 				}
 			}
-		case "thread/start":
+		case "thread/start", "thread/resume", "thread/fork":
 			if pending.autoStart {
 				if thread, ok := result["thread"].(map[string]any); ok {
 					threadID := stringValue(thread["id"])
@@ -245,7 +257,7 @@ func (t *Transformer) ServerLine(line []byte) ([]byte, error) {
 					}
 				}
 			}
-		case "thread/read", "thread/resume":
+		case "thread/read":
 			if thread, ok := result["thread"].(map[string]any); ok {
 				changed = t.rewriteThreadResult(result, stringValue(thread["id"]))
 			}
@@ -545,6 +557,28 @@ func isUltraDenial(text string) bool {
 
 func isVirtual(model string) bool { return strings.EqualFold(strings.TrimSpace(model), VirtualModel) }
 func isTrue(value any) bool       { typed, ok := value.(bool); return ok && typed }
+
+func hasVirtualModelField(value any) bool {
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, child := range typed {
+			normalized := strings.ToLower(strings.NewReplacer("_", "", "-", "").Replace(key))
+			if strings.HasSuffix(normalized, "model") && isVirtual(stringValue(child)) {
+				return true
+			}
+			if hasVirtualModelField(child) {
+				return true
+			}
+		}
+	case []any:
+		for _, child := range typed {
+			if hasVirtualModelField(child) {
+				return true
+			}
+		}
+	}
+	return false
+}
 
 func stringValue(value any) string {
 	if value == nil {

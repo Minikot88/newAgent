@@ -1,94 +1,41 @@
-# ติดตั้งเลขาคิมบน Mac ทีละขั้น
+# ติดตั้ง Kimmizo Auto บน Mac ทีละขั้น
 
-## วิธี A — เพิ่มโฟลเดอร์เข้า Codex แล้วใช้ prompt เดียว
+1. เปิด Project ที่ root ของ `KIMMIZO_MAC_COMPLETE_BUNDLE`
+2. ยืนยันระบบ:
 
-1. คัดลอกทั้งโฟลเดอร์ `KIMMIZO_MAC_COMPLETE_BUNDLE` ไปที่:
-
-   ```text
-   /Users/<ชื่อผู้ใช้>/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
+   ```zsh
+   uname -s
+   uname -m
+   basename "$PWD"
    ```
 
-2. เปิด Codex บน Mac แล้วเลือกเพิ่ม Project/Folder
-3. เลือกโฟลเดอร์ `KIMMIZO_MAC_COMPLETE_BUNDLE` ทั้งโฟลเดอร์ ไม่ใช่เลือกไฟล์ย่อย
-4. เปิด task ใหม่ใน Project นี้
-5. เปิด `START_PROMPT_MAC.txt`, คัดลอกข้อความทั้งหมด แล้ววางในแชท
-6. อนุญาตเฉพาะคำสั่งที่ทำงานภายในโฟลเดอร์ bundle, `~/.kimmizo-secretary/auto` และ `~/Library/LaunchAgents/com.kimmizo.kimmizo-auto.plist`
-7. รอผล `PASS` จาก `./status.sh`
-8. กด `Command-Q` เพื่อปิด Codex ให้หมด แล้วเปิดใหม่
-9. เปิดเมนู Model และเลือก `✦ Auto`
-10. กลับมาที่ Project bundle แล้วตรวจตาม `VERIFY_ON_MAC.md`
+   ต้องได้ `Darwin`, `arm64` และ `KIMMIZO_MAC_COMPLETE_BUNDLE`
 
-## วิธี B — ติดตั้งเองใน Terminal
+3. ตรวจ manifest และติดตั้ง:
 
-เปิด Terminal แล้วรัน:
+   ```zsh
+   /usr/bin/shasum -a 256 -c BUNDLE-MANIFEST.sha256
+   chmod +x install.sh status.sh uninstall.sh name.sh
+   ./install.sh
+   ```
 
-```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
-chmod +x install.sh status.sh uninstall.sh
-./install.sh
-```
+   Installer ไม่ถามชื่อและไม่แก้ `~/.codex/config.toml`
 
-ตัวติดตั้งจะถามชื่อก่อนเริ่มติดตั้ง หากต้องการกำหนดล่วงหน้าให้ใช้ `./install.sh --name "ชื่อที่ต้องการ"`
+4. ตรวจสถานะด้วย `./status.sh`
+5. ปิด Codex ด้วย `Command-Q` แล้วเปิดใหม่
+6. เปิดเมนู Model และเลือก `✦ Auto`
+7. เริ่มงานอ่านอย่างเดียวเพื่อทดสอบ routing แล้วรัน `./status.sh` อีกครั้ง
+8. เมื่อทุกข้อผ่านแล้วจึงถามชื่อผู้ช่วย และนำคำตอบมาตั้งด้วย `./name.sh "ชื่อที่ผู้ใช้ตอบ"`
+9. ปิดและเปิด Codex ใหม่หลังตั้งชื่อ
 
-ผลสำเร็จควรมีบรรทัด:
+## หลักการทำงาน
 
-```text
-PASS: <ชื่อที่เลือก> installed at /Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto
-```
+- `✦ Auto` ปรากฏเฉพาะใน UI/local catalog
+- `thread/start`, `thread/resume`, `thread/fork` และ `turn/start` ถูกแปลงเป็น official model ก่อนส่งต่อ
+- request ที่ยังมี virtual model ใน model field จะถูกหยุดแบบ fail-closed
+- `เริ่มงานใหม่:` เริ่มการประเมิน route ใหม่
+- งาน Ultra ต้องได้รับข้อความอนุมัติแยกต่างหาก
 
-จากนั้นปิด Codex ด้วย `Command-Q`, เปิดใหม่ และรัน:
+## หากตรวจไม่ผ่าน
 
-```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
-./status.sh
-```
-
-## ถ้าหา real Codex ไม่พบ
-
-รัน:
-
-```zsh
-find /Applications -path '*/Contents/Resources/*' -type f \( -name codex -o -name codex-cli \) -perm -111 -print
-```
-
-ถ้าได้หนึ่ง path ให้ส่ง path นั้นแก่ installer:
-
-```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
-./install.sh --real-codex '/absolute/path/ที่พบ'
-```
-
-ห้ามเลือก `kimmizo-auto` เป็น real Codex เพราะจะเกิดการเรียกวน ตัวติดตั้งจะปฏิเสธกรณีนี้อัตโนมัติ
-
-## ถ้า `✦ Auto` ยังไม่ขึ้น
-
-อย่าแก้ `~/.codex/config.toml` และอย่าเปลี่ยน `CODEX_CLI_PATH` เอง ให้ตรวจจาก root ของ bundle:
-
-```zsh
-./status.sh
-launchctl getenv CODEX_CLI_PATH
-```
-
-ค่าหลังคำสั่งที่สองต้องเป็น:
-
-```text
-/Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto/kimmizo-desktop-entrypoint
-```
-
-ถ้าไม่ตรง ให้รัน installer ซ้ำจาก bundle เดิมด้วย `./install.sh --name "ชื่อที่เลือก"` แล้วใช้ `Command-Q` ปิด Codex ทุกหน้าต่างก่อนเปิดใหม่. Entry point นี้จำเป็นเพราะ Codex Desktop ส่ง `-c` มาก่อน `app-server`; ไบนารี Kimmizo จะไม่เข้า proxy mode หากไม่มีการจัดลำดับ argument นี้.
-
-## การใช้งาน
-
-- เลือก `✦ Auto` เมื่อต้องการให้ระบบปรับโมเดลและ effort ตามช่วงงาน
-- เรียกชื่อ “คิม” ในแชทเพื่อเปิดบุคลิกภาษาไทยของเลขาคิมใน task นั้น
-- พิมพ์ `เริ่มงานใหม่:` เมื่อต้องการให้ Auto ประเมินระดับงานใหม่แทนการรักษาระดับเดิม
-- งานระดับ Ultra ต้องยืนยันด้วยข้อความ `อนุมัติ` ก่อน
-
-## ถอนการติดตั้ง
-
-```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
-./uninstall.sh
-```
-
-ปิด Codex ด้วย `Command-Q` แล้วเปิดใหม่หลังถอน
+รัน `./status.sh` และแก้ตามบรรทัด `DEGRADED` ห้ามแก้ `CODEX_CLI_PATH` หรือ `~/.codex/config.toml` ด้วยตนเอง ให้รัน installer ซ้ำจาก bundle เดิมหลังตรวจ ownership receipt แล้ว

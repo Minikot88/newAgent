@@ -891,6 +891,14 @@ def _capability_status(
     skill_evidence = _glob_home(home, detect.get("skill_paths", []))
     cache_evidence = _glob_home(home, detect.get("cache_paths", []))
     command_evidence = _command_evidence(detect.get("commands", []))
+    # The setup process itself is authoritative evidence for Python on hosts
+    # where only a versioned executable (for example Homebrew python3.12) is
+    # present.  Requiring the Windows-oriented aliases ``python`` or ``py``
+    # incorrectly marks those macOS installations as missing.
+    if capability.get("id") == "python" and sys.version_info >= (3, 11):
+        command_evidence = _unique_paths(
+            [*(Path(item) for item in command_evidence), Path(sys.executable)]
+        )
     evidence.extend(skill_evidence)
     evidence.extend(cache_evidence)
     evidence.extend(command_evidence)
@@ -2028,7 +2036,7 @@ def _team_identities(project_id: str, members: list[dict[str, Any]]) -> dict[str
 
 def _instructions_for_role(role: str) -> str:
     shared = (
-        "Work only on the bounded task from Kim. Inspect real evidence before concluding. "
+        "Work only on the bounded task from the main assistant. Inspect real evidence before concluding. "
         "Load only allowlisted skills relevant to this assignment. Return at most 10 bullets and point to files, tests, or receipts instead of pasting raw logs. "
         "Do not expand authority, authentication, MCP access, plugins, sandbox, or external writes."
     )

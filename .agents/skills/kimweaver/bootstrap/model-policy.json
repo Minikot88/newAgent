@@ -1,0 +1,63 @@
+{
+  "schema_version": 3,
+  "policy_version": "3.0.0",
+  "usage_policy": {
+    "mode": "chatgpt_plus_limit_first",
+    "default_model": "gpt-5.6-luna",
+    "default_effort": "low",
+    "manual_only_models": ["gpt-6-astra"],
+    "automatic_multi_agent": false,
+    "fast_mode": false,
+    "execution_mode": "serial",
+    "verify_before_escalation": true,
+    "escalation_order": ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol", "gpt-6-astra"]
+  },
+  "model_selection": {
+    "fast": {
+      "effort": "low",
+      "signals": [
+        "translate", "summarize", "rewrite", "short answer", "status only", "list files", "find file", "read only", "quick question",
+        "แปล", "สรุป", "เขียนใหม่", "ตอบสั้น", "เช็คสถานะ", "ดูสถานะ", "รายชื่อไฟล์", "หาไฟล์", "อ่านอย่างเดียว", "คำถามสั้น"
+      ],
+      "models": ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"]
+    },
+    "balanced": {
+      "effort": "medium",
+      "signals": [],
+      "models": ["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"]
+    },
+    "deep": {
+      "effort": "high",
+      "signals": [
+        "architecture", "large refactor", "root cause", "complex debugging", "benchmark", "multi-step", "whole project",
+        "ทั้งระบบ", "สถาปัตยกรรม", "รีแฟกเตอร์", "หาสาเหตุ", "แก้บั๊กซับซ้อน", "หลายขั้นตอน", "ตรวจทั้งโปรเจกต์"
+      ],
+      "models": ["gpt-5.6-terra", "gpt-5.6-sol", "gpt-5.6-luna"]
+    },
+    "critical": {
+      "effort": "high",
+      "signals": [
+        "production", "deploy", "security", "vulnerability", "authentication", "authorization", "payment", "database migration", "schema migration", "incident", "release", "compliance", "audit", "real money", "customer data",
+        "ระบบจริง", "โปรดักชัน", "ดีพลอย", "ความปลอดภัย", "ช่องโหว่", "ยืนยันตัวตน", "กำหนดสิทธิ์", "ชำระเงิน", "ไมเกรตฐานข้อมูล", "ย้ายฐานข้อมูล", "เหตุขัดข้อง", "รีลีส", "กำกับดูแล", "ตรวจสอบระบบ", "เงินจริง", "ข้อมูลลูกค้า"
+      ],
+      "models": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"]
+    },
+    "ultra": {
+      "effort": "ultra",
+      "pending_effort": "high",
+      "requires_approval": true,
+      "signals": [
+        "multi-agent", "multi agent", "whole codebase", "mission critical", "critical incident", "major migration", "largest", "หลายเอเจนต์", "มอบงานหลาย", "ทั้งโค้ดเบส", "ทั้ง codebase", "ภารกิจใหญ่", "วิกฤต", "ย้ายระบบครั้งใหญ่"
+      ],
+      "models": ["gpt-5.6-sol", "gpt-5.6-terra"]
+    }
+  },
+  "thresholds": {"fast_max_chars": 1400, "deep_min_chars": 6000, "ultra_min_chars": 30000},
+  "voice": {
+    "trigger": "เลขาคิม",
+    "pronoun": "ฉัน",
+    "suffix": "ค่ะ",
+    "instruction": "เมื่อถูกเรียกว่า เลขาคิม ให้ตอบภาษาไทย ใช้สรรพนาม ฉัน และลงท้ายด้วย ค่ะ",
+    "blocked_message": "ยังตรวจสอบ voice bootstrap ของเลขาคิมไม่สำเร็จ จึงไม่เริ่มงานสาระสำคัญค่ะ"
+  }
+}

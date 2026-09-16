@@ -211,3 +211,65 @@ func TestServerNotificationsPreserveVirtualThreadSettings(t *testing.T) {
 		t.Fatalf("thread/settings/updated was not rewritten: %s %v", updated, err)
 	}
 }
+
+func TestThreadResumeRewritesVirtualModelBeforeForwarding(t *testing.T) {
+	tr, _ := newFixtureTransformer(t)
+	seedCatalog(t, tr)
+
+	forward, immediate, err := tr.ClientLine([]byte(`{"id":30,"method":"thread/resume","params":{"threadId":"t30","model":"athena-auto"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(immediate) != 0 {
+		t.Fatalf("unexpected immediate response: %s", immediate)
+	}
+	if bytes.Contains(forward, []byte(`athena-auto`)) {
+		t.Fatalf("virtual model escaped to real Codex: %s", forward)
+	}
+	if !bytes.Contains(forward, []byte(`"model":"gpt-5.6-terra"`)) {
+		t.Fatalf("resume was not routed to an official model: %s", forward)
+	}
+}
+
+func TestThreadForkRewritesVirtualModelAndTracksForkedThread(t *testing.T) {
+	tr, _ := newFixtureTransformer(t)
+	seedCatalog(t, tr)
+
+	forward, immediate, err := tr.ClientLine([]byte(`{"id":31,"method":"thread/fork","params":{"threadId":"source","model":"athena-auto"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(immediate) != 0 {
+		t.Fatalf("unexpected immediate response: %s", immediate)
+	}
+	if bytes.Contains(forward, []byte(`athena-auto`)) {
+		t.Fatalf("virtual model escaped to real Codex: %s", forward)
+	}
+	if !bytes.Contains(forward, []byte(`"model":"gpt-5.6-terra"`)) {
+		t.Fatalf("fork was not routed to an official model: %s", forward)
+	}
+
+	response, err := tr.ServerLine([]byte(`{"id":31,"result":{"thread":{"id":"forked","model":"gpt-5.6-terra"},"model":"gpt-5.6-terra","reasoningEffort":"medium"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(response, []byte(`"model":"athena-auto"`)) {
+		t.Fatalf("forked thread did not preserve Auto display state: %s", response)
+	}
+}
+
+func TestUnknownRequestFailsClosedWhenVirtualModelWouldEscape(t *testing.T) {
+	tr, _ := newFixtureTransformer(t)
+	seedCatalog(t, tr)
+
+	forward, immediate, err := tr.ClientLine([]byte(`{"id":32,"method":"future/thread/action","params":{"model":"athena-auto"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(forward) != 0 {
+		t.Fatalf("unsafe request was forwarded: %s", forward)
+	}
+	if !bytes.Contains(immediate, []byte(`"code":-32072`)) {
+		t.Fatalf("unsafe request did not fail closed: %s", immediate)
+	}
+}

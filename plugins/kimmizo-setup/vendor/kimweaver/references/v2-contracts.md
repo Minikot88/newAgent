@@ -25,6 +25,6 @@ Persisted task identity is bound to both its canonical task directory and the ta
 
 ## Project Capsule And Voice
 
-A project capsule uses local Kimweaver files and a content-hashed manifest. It does not read Home Base at runtime. The voice sidecar is hash-bound to `bootstrap/model-policy.json`. A verified proxy injects the minimal `ฉัน`/`ค่ะ` invariant only after the `เลขาคิม` trigger. Missing or invalid capsule bootstrap blocks substantive secretary work; unrelated Auto work is unaffected.
+A project capsule uses local Kimweaver files and a content-hashed manifest. It does not read Home Base at runtime. The voice sidecar is hash-bound to `bootstrap/model-policy.json`. After the user configures a name, a verified proxy injects the minimal `ฉัน`/`ค่ะ` invariant only after the configured trigger. Missing or invalid capsule bootstrap blocks substantive secretary work; unrelated Auto work is unaffected.
 
 The model policy is ChatGPT Plus Limit-First: serial solo execution by default, Luna before Terra before Sol, deterministic verification before escalation, and no automatic Astra, Max, Ultra, Fast mode, or multi-agent execution. Astra and Ultra require explicit boss approval for each use or activation.

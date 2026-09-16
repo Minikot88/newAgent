@@ -1,11 +1,11 @@
-โปรดติดตั้ง skill “คิม” จากโฟลเดอร์ Project ปัจจุบัน โดยลงมือทำจริง
+โปรดติดตั้งและตรวจ Kimmizo Auto จาก Project ปัจจุบันโดยลงมือทำจริง
 
-1. ยืนยันว่า current folder คือ KIMMIZO_MAC_COMPLETE_BUNDLE
-2. ห้ามใช้หรือสร้าง Git repository
-3. ห้ามอ่าน คัดลอก แสดง หรือส่งต่อ secrets, token, private key, password, credentials, auth files หรือไฟล์ .env
-4. คัดลอก `skills/kimmizo` ไปที่ `~/.codex/skills/kimmizo` โดยรักษาไฟล์ `SKILL.md`
-5. ห้ามแก้ `~/.codex/config.toml` และห้ามตั้ง `CODEX_CLI_PATH`
-6. ปิด Codex ด้วย Command-Q แล้วเปิดใหม่
-7. ยืนยันว่าใช้เฉพาะโมเดลทางการที่ปรากฏในเมนู Model; ห้ามสร้างหรือเลือก `athena-auto` หรือ `✦ Auto`
-8. ทดสอบด้วยข้อความ `คิม ช่วยแนะนำตัวสั้น ๆ` ผลต้องเป็นภาษาไทย เป็นผู้หญิง ใช้ “ฉัน” และลงท้าย “ค่ะ”
-9. สรุปผลพร้อม exit code และหลักฐาน โดยไม่เปิดเผยข้อมูลลับ
+1. อ่าน README.md, STEP_BY_STEP_MAC.md และ VERIFY_ON_MAC.md
+2. ยืนยันว่าเป็น macOS arm64 และ current folder คือ KIMMIZO_MAC_COMPLETE_BUNDLE
+3. ห้ามใช้หรือสร้าง Git repository และห้ามอ่าน secrets, credentials หรือ .env
+4. ตรวจ BUNDLE-MANIFEST.sha256 แล้วรัน `chmod +x install.sh status.sh uninstall.sh name.sh` และ `./install.sh`
+5. ตรวจ `./status.sh`, unit/integration tests และ real app-server routing ให้ exit code สำเร็จ
+6. ยืนยันว่า `✦ Auto` เป็น local preset และทุก outbound request ใช้ official model จาก real Codex catalog
+7. ปิด Codex ด้วย Command-Q แล้วเปิดใหม่
+8. ห้ามถามหรือตั้งชื่อก่อนทุก verification ผ่าน
+9. หลังทุกอย่างผ่านแล้วเท่านั้น ให้ถามว่า “ต้องการตั้งชื่อผู้ช่วยว่าอะไรคะ?” และรอคำตอบก่อนรัน name.sh

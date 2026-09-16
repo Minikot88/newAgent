@@ -16,7 +16,7 @@ import (
 	"athena-auto/internal/state"
 )
 
-const Version = "1.0.0"
+const Version = "1.1.0"
 
 type Status struct {
 	Status               string `json:"status"`
@@ -27,6 +27,8 @@ type Status struct {
 	SecretsCopied        bool   `json:"secretsCopied"`
 	PolicyVerified       bool   `json:"policyVerified"`
 	VoiceVerified        bool   `json:"voiceVerified"`
+	OutboundModelGuard   bool   `json:"outboundModelGuard"`
+	NameConfigured       bool   `json:"nameConfigured"`
 	RealCLIConfigured    bool   `json:"realCliConfigured"`
 	RealCLIExecutable    bool   `json:"realCliExecutable"`
 	DefaultAuto          bool   `json:"defaultAuto"`
@@ -148,14 +150,15 @@ func locateRuntime(environ []string, executable string) (runtimeFiles, error) {
 
 func inspect(files runtimeFiles, executable string) Status {
 	status := Status{
-		Status:        "ready",
-		Version:       Version,
-		VirtualModel:  proxy.VirtualModel,
-		DisplayName:   proxy.VirtualDisplayName,
-		StoresPrompts: false,
-		SecretsCopied: false,
-		HostOS:        runtime.GOOS,
-		HostArch:      runtime.GOARCH,
+		Status:             "ready",
+		Version:            Version,
+		VirtualModel:       proxy.VirtualModel,
+		DisplayName:        proxy.VirtualDisplayName,
+		StoresPrompts:      false,
+		SecretsCopied:      false,
+		OutboundModelGuard: true,
+		HostOS:             runtime.GOOS,
+		HostArch:           runtime.GOARCH,
 	}
 	loadedPolicy, policyErr := policy.LoadVerified(files.policy, files.policyHash)
 	if policyErr != nil {
@@ -173,6 +176,7 @@ func inspect(files runtimeFiles, executable string) Status {
 		status.VoiceError = "policy and voice versions do not match"
 	} else {
 		status.VoiceVerified = true
+		status.NameConfigured = voice.Configured
 	}
 	if raw, err := os.ReadFile(files.realPath); err == nil && strings.TrimSpace(string(raw)) != "" {
 		status.RealCLIConfigured = true

@@ -1,57 +1,53 @@
 # KIMMIZO MAC COMPLETE BUNDLE
 
-โฟลเดอร์นี้เก็บ skill “คิม” เลขาผู้ช่วยผู้หญิงสำหรับ Codex บน Mac Apple Silicon
+ชุดติดตั้งผู้ช่วยภาษาไทยและ `✦ Auto` สำหรับ Codex Desktop บน Mac Apple Silicon
 
-`✦ Auto` และ `athena-auto` ถูกเลิกใช้ใน bundle นี้ เพราะบัญชี ChatGPT ปฏิเสธโมเดลที่ไม่ใช่โมเดลทางการของ Codex. ให้เลือกโมเดลที่ Codex แสดงในเมนู Model เท่านั้น
+`✦ Auto` เป็น local UI preset ไม่ใช่โมเดลของบริการ เมื่อผู้ใช้เลือก preset นี้ runtime จะอ่าน model catalog ที่ Codex ส่งมา เลือกเฉพาะ model/effort ที่มีอยู่จริง แล้วแทนค่าเป็นโมเดลทางการก่อนส่ง request เข้า real Codex ทุกครั้ง Outbound guard จะหยุด request หากยังมี virtual slug เหลืออยู่
 
-## สิ่งที่อยู่ในโฟลเดอร์
-
-- `skills/kimmizo/SKILL.md` — บุคลิกคิมผู้หญิงสำหรับติดตั้งเป็น Codex skill
-- `uninstall.sh` — ถอน legacy Kimmizo Auto runtime หากเคยติดตั้งไว้
-- `START_PROMPT_MAC.txt` — prompt เดียวสำหรับวางในแชท Codex บน Mac
-- `STEP_BY_STEP_MAC.md` — วิธีเพิ่มโฟลเดอร์เข้า Codex และติดตั้งทีละขั้น
-- `VERIFY_ON_MAC.md` — checklist หลังปิดและเปิด Codex ใหม่
-- `bin/darwin-arm64/kimmizo-auto` — ไบนารี native สำหรับ Apple Silicon
-- `kimmizo-auto-macos/` — source code และ policy ที่ตรวจด้วย SHA-256
-- `BUNDLE-MANIFEST.sha256` — hash ของไฟล์ที่แจกทั้งหมด
-- `BUILD-RECEIPT.json` — หลักฐานการ build บน Windows และขอบเขตที่ยังต้องตรวจบน Mac
-
-## ติดตั้ง skill คิม
-
-สมมติวางโฟลเดอร์ไว้ที่ `~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE`:
+## ติดตั้ง
 
 ```zsh
-mkdir -p ~/.codex/skills
-cp -R skills/kimmizo ~/.codex/skills/kimmizo
+chmod +x install.sh status.sh uninstall.sh name.sh
+./install.sh
+./status.sh
 ```
 
-กด `Command-Q` เพื่อปิด Codex ให้หมด แล้วเปิดใหม่ จากนั้นเรียก “คิม” ในแชท และเลือกเฉพาะโมเดลทางการจากเมนู Model
+Installer จะไม่ถามและไม่ตั้งชื่อผู้ช่วย หลัง verification ผ่านแล้วจึงตั้งชื่อจากคำตอบของผู้ใช้:
 
-ถ้าต้องการให้ Codex ทำขั้นตอนให้ทั้งหมด ให้นำโฟลเดอร์นี้เข้าเป็น Project แล้ววางข้อความจาก `START_PROMPT_MAC.txt` ในแชท
+```zsh
+./name.sh "ชื่อที่ผู้ใช้ตอบ"
+```
+
+จากนั้นปิด Codex ด้วย `Command-Q` แล้วเปิดใหม่
+
+## สิ่งที่ติดตั้ง
+
+- `skills/kimmizo/SKILL.md` — policy บุคลิกภาษาไทยแบบยังไม่ตั้งชื่อ
+- `~/.kimmizo-secretary/auto` — runtime, verified policy, voice policy และ state ที่ไม่เก็บ prompt
+- `~/Library/LaunchAgents/com.kimmizo.kimmizo-auto.plist` — เปิด `CODEX_CLI_PATH` สำหรับ Codex Desktop
+- `✦ Auto` — local preset ที่ route ไปยังโมเดลทางการจาก catalog
+
+## ความปลอดภัย
+
+- ไม่อ่านหรือคัดลอก token, credentials, private keys, password, connection string หรือ `.env`
+- ไม่แก้ `~/.codex/config.toml`
+- ไม่ส่ง `athena-auto` ไปยัง real Codex หรือบริการ OpenAI
+- เก็บเฉพาะ thread ID, route ล่าสุด และสถานะ Auto; ไม่เก็บ prompt
+- policy และ voice policy ตรวจ SHA-256 ก่อนใช้งาน
+- installer และ uninstaller ตรวจ ownership receipt ก่อนแก้ installation root
 
 ## ข้อกำหนด
 
-- macOS บน Apple Silicon (`arm64`)
-- ติดตั้ง Codex Desktop ไว้แล้ว
-- ใช้งานบัญชี Codex เดิมของเครื่อง ไม่ต้องคัดลอกบัญชี ประวัติ หรือข้อมูลลับจากเครื่องอื่น
-- ไม่ต้องติดตั้ง Homebrew, Go, Python, Node, .NET หรือ Xcode
+- macOS Apple Silicon (`arm64`)
+- Codex Desktop ติดตั้งและเข้าสู่ระบบแล้ว
+- ไม่ต้องติดตั้ง Homebrew, Go, Python, Node, .NET หรือ Xcode เพื่อใช้งาน bundle
 - ไม่ใช้ `sudo`
 
-## ถอน legacy Kimmizo Auto
+## ตรวจสอบและถอนการติดตั้ง
 
 ```zsh
-cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
+./status.sh
 ./uninstall.sh
 ```
 
-ตัวถอนจะลบเฉพาะ installation root และ LaunchAgent ที่ผ่านการตรวจ ownership และคืน `previousCodexCliPath` เฉพาะเมื่อค่าปัจจุบันยังชี้มาที่ Kimmizo
-
-## ขอบเขตการยืนยัน
-
-ไบนารีนี้ cross-build และผ่าน unit/integration tests บน build host แล้ว แต่การขึ้น `✦ Auto` ใน UI ต้องยืนยันบน Mac หลังติดตั้งและเปิด Codex ใหม่ตาม `VERIFY_ON_MAC.md`
-
-ดูการตั้งค่า Codex ทางการได้จาก [OpenAI Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
-
-## เหตุผลที่เลิกใช้ `✦ Auto`
-
-แม้ UI สามารถแสดงชื่อ `✦ Auto` ได้ แต่เมื่อเริ่ม task Codex แจ้งว่า `athena-auto` ไม่รองรับกับบัญชี ChatGPT. นี่เป็นการตรวจฝั่งบริการ จึงไม่สามารถแก้ด้วย launcher, catalog หรือ config ในเครื่องได้. Bundle จึงเปลี่ยนเป็น skill คิมที่ทำงานร่วมกับโมเดลทางการได้จริง
+`status.sh` ต้องรายงาน `status: ready`, `outboundModelGuard: true`, policy/voice verified, real CLI executable และ `✦ Auto` อยู่ใน local installed catalog

@@ -1,0 +1,6 @@
+# BEGIN KIMMIZO MANAGED BLOCK v1.0.0 checksum:3c009a50f76570271b2a9cceec1077415d618a307ec02f935f8753595d397c92
+[agents]
+max_threads = 4
+max_depth = 1
+interrupt_message = true
+# END KIMMIZO MANAGED BLOCK

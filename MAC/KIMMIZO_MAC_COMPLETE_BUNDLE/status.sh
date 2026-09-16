@@ -8,6 +8,7 @@ CATALOG_LAUNCHER="$INSTALL_ROOT/kimmizo-real-codex"
 MODEL_CATALOG="$INSTALL_ROOT/model-catalog.json"
 LABEL="com.kimmizo.kimmizo-auto"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
+SKILL_TARGET="$HOME/.codex/skills/kimmizo/SKILL.md"
 
 [[ -x "$NATIVE_PROXY_PATH" && -x "$PROXY_PATH" ]] || {
   print -u2 -r -- "DEGRADED: Kimmizo executable or Desktop entrypoint is missing."
@@ -24,8 +25,24 @@ proxy_status="$($NATIVE_PROXY_PATH --athena-status)" || {
   exit 1
 }
 print -r -- "$proxy_status"
+print -r -- "$proxy_status" | /usr/bin/grep -F '"outboundModelGuard":true' >/dev/null || {
+  print -u2 -r -- "DEGRADED: outbound virtual-model guard is not active."
+  exit 1
+}
 secretary_name="$(/usr/bin/plutil -extract secretaryName raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
 [[ -n "$secretary_name" ]] && print -r -- "secretaryName=$secretary_name"
+receipt_skill="$(/usr/bin/plutil -extract skillPath raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
+receipt_skill_hash="$(/usr/bin/plutil -extract skillSha256 raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
+[[ "$receipt_skill" == "$SKILL_TARGET" && -f "$SKILL_TARGET" && -n "$receipt_skill_hash" ]] || {
+  print -u2 -r -- "DEGRADED: installed Kimmizo skill is missing or not receipt-bound."
+  exit 1
+}
+actual_skill_hash="$(/usr/bin/shasum -a 256 "$SKILL_TARGET" | /usr/bin/awk '{print $1}')"
+[[ "$actual_skill_hash" == "$receipt_skill_hash" ]] || {
+  print -u2 -r -- "DEGRADED: installed Kimmizo skill hash does not match the receipt."
+  exit 1
+}
+print -r -- "PASS: installed Kimmizo skill matches the receipt."
 
 [[ -f "$LAUNCH_AGENT" ]] || {
   print -u2 -r -- "DEGRADED: LaunchAgent is missing: $LAUNCH_AGENT"

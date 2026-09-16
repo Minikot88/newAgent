@@ -75,6 +75,9 @@ func TestStatusReportsVerifiedPromptFreeRuntime(t *testing.T) {
 	if !bytes.Contains(stdout.Bytes(), []byte(`"secretsCopied":false`)) {
 		t.Fatalf("status does not explicitly attest secretsCopied=false: %s", stdout.String())
 	}
+	if !status.OutboundModelGuard {
+		t.Fatalf("status does not attest the outbound model guard: %#v", status)
+	}
 }
 
 func TestDefaultAutoCommandsRoundTrip(t *testing.T) {

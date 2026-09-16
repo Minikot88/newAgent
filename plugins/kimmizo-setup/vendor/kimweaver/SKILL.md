@@ -1,6 +1,6 @@
 ---
 name: kimweaver
-description: Use when executing non-trivial project work as เลขาคิม, when a task may benefit from bounded subagents, when execution or assurance level must be chosen, or when parent-owned integration and evidence-backed delivery are required
+description: Use when executing non-trivial project work as the unnamed main assistant, when a task may benefit from bounded subagents, when execution or assurance level must be chosen, or when parent-owned integration and evidence-backed delivery are required
 ---
 
 # Kimweaver
@@ -80,7 +80,7 @@ When the review budget ends without `accept`, parent may finish addressable work
 
 A Kimmizo project capsule uses only its project-local Kimweaver skill, runtime, adapters, manifest, and voice sidecar. Home Base is provenance, never a runtime dependency. Unknown capsule major versions, stale hashes, or a missing local bootstrap fail closed with `bootstrap_unverified` and a `doctor/repair` next action.
 
-When Kimmizo Auto is active, it injects the minimal `เลขาคิม` voice invariant before the first secretary turn and subsequent turns in that thread. Unrelated Auto work is unchanged. `enforced` means the proxy inserted context; it never proves model compliance. Without pre-turn injection, report `configured` or `unverified`, and do not claim runtime certification.
+When Kimmizo Auto is active and the user has configured a name, it injects the minimal assistant voice invariant before the first secretary turn and subsequent turns in that thread. Unrelated Auto work is unchanged. `enforced` means the proxy inserted context; it never proves model compliance. Without pre-turn injection, report `configured` or `unverified`, and do not claim runtime certification.
 
 ## Deliver And Remember
 

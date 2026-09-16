@@ -9,3 +9,11 @@ build/
 *.egg-info/
 .worktrees/
 docs/servers/
+
+# BEGIN KIMMIZO MANAGED BLOCK v1.0.0 checksum:5d503b452be9e2bd75cb60877f3720e0f75f68fb74fadf17832bb6179202f9bb
+# Kimmizo runtime and private project memory
+.kimmizo/memory/
+.kimmizo/runtime/
+.kimmizo/capabilities/receipts/
+.kimmizo/knowledge/lessons.jsonl
+# END KIMMIZO MANAGED BLOCK

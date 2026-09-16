@@ -20,4 +20,9 @@ REAL_CODEX="$(<"$NATIVE_PATH_FILE")"
 }
 
 unset CODEX_CLI_PATH
+for argument in "$@"; do
+  if [[ "$argument" == "app-server" ]]; then
+    exec "$REAL_CODEX" "$@"
+  fi
+done
 exec "$REAL_CODEX" -c "model_catalog_json=\"$CATALOG_PATH\"" "$@"
