@@ -1,14 +1,11 @@
-โปรดติดตั้ง Kimmizo Auto จากโฟลเดอร์ Project ปัจจุบันให้จบ โดยลงมือทำจริงและรายงานตามหลักฐาน:
+โปรดติดตั้ง skill “คิม” จากโฟลเดอร์ Project ปัจจุบัน โดยลงมือทำจริง
 
-0) ก่อนเริ่มติดตั้ง ให้ถามผู้ใช้ว่าต้องการตั้งชื่อเลขาคิมว่าอะไร หากผู้ใช้ไม่ระบุให้ใช้ “เลขาคิม” และส่งชื่อด้วย `./install.sh --name "ชื่อที่ผู้ใช้เลือก"`
-
-1) ยืนยันว่าโฟลเดอร์ปัจจุบันคือ KIMMIZO_MAC_COMPLETE_BUNDLE และระบบเป็น macOS Apple Silicon arm64
-2) อ่าน README.md และ STEP_BY_STEP_MAC.md เฉพาะคำแนะนำติดตั้ง ห้ามอ่านหรือคัดลอก credentials, auth files, .env, private keys, tokens หรือประวัติสนทนา
-3) รันคำสั่งต่อไปนี้จาก root ของ bundle:
-   chmod +x install.sh status.sh uninstall.sh
-   ./install.sh
-4) หาก installer หา real Codex executable ไม่พบ ให้ค้นหาเฉพาะ executable ชื่อ codex หรือ codex-cli ภายใน /Applications/Codex.app/Contents/Resources แล้วรัน ./install.sh --real-codex '<absolute-path-ที่ตรวจแล้ว>'
-5) ห้ามใช้ sudo ห้ามติดตั้ง Homebrew/Go/Python/Node/.NET/Xcode และห้ามแก้ ~/.codex/config.toml
-6) เมื่อติดตั้งสำเร็จให้รัน ./status.sh และยืนยัน status=ready, policyVerified=true, voiceVerified=true, realCliExecutable=true, storesPrompts=false, secretsCopied=false และ CODEX_CLI_PATH ชี้ไปยัง ~/.kimmizo-secretary/auto/kimmizo-auto
-7) หากขั้นตอนไหนล้มเหลว ให้หยุด รายงาน error จริง และยืนยันว่า rollback สำเร็จ อย่าอ้างว่า PASS
-8) เมื่อทุกอย่าง PASS ให้บอกฉันกด Command-Q เพื่อปิด Codex แล้วเปิดใหม่ จากนั้นให้เลือก ✦ Auto และทำ checklist ใน VERIFY_ON_MAC.md ค่ะ
+1. ยืนยันว่า current folder คือ KIMMIZO_MAC_COMPLETE_BUNDLE
+2. ห้ามใช้หรือสร้าง Git repository
+3. ห้ามอ่าน คัดลอก แสดง หรือส่งต่อ secrets, token, private key, password, credentials, auth files หรือไฟล์ .env
+4. คัดลอก `skills/kimmizo` ไปที่ `~/.codex/skills/kimmizo` โดยรักษาไฟล์ `SKILL.md`
+5. ห้ามแก้ `~/.codex/config.toml` และห้ามตั้ง `CODEX_CLI_PATH`
+6. ปิด Codex ด้วย Command-Q แล้วเปิดใหม่
+7. ยืนยันว่าใช้เฉพาะโมเดลทางการที่ปรากฏในเมนู Model; ห้ามสร้างหรือเลือก `athena-auto` หรือ `✦ Auto`
+8. ทดสอบด้วยข้อความ `คิม ช่วยแนะนำตัวสั้น ๆ` ผลต้องเป็นภาษาไทย เป็นผู้หญิง ใช้ “ฉัน” และลงท้าย “ค่ะ”
+9. สรุปผลพร้อม exit code และหลักฐาน โดยไม่เปิดเผยข้อมูลลับ

@@ -1,0 +1,29 @@
+#!/bin/zsh
+set -euo pipefail
+
+RUNTIME_ROOT="$(cd "$(dirname "$0")" && pwd -P)"
+NATIVE_PROXY="$RUNTIME_ROOT/kimmizo-auto"
+[[ -x "$NATIVE_PROXY" ]] || {
+  print -u2 -r -- "kimmizo-desktop-entrypoint: missing native Kimmizo proxy"
+  exit 78
+}
+
+leading_options=()
+while (( $# > 0 )); do
+  case "$1" in
+    -c|--config|--enable|--disable)
+      (( $# >= 2 )) || exec "$NATIVE_PROXY" "${leading_options[@]}" "$@"
+      leading_options+=("$1" "$2")
+      shift 2
+      ;;
+    app-server)
+      shift
+      exec "$NATIVE_PROXY" app-server "${leading_options[@]}" "$@"
+      ;;
+    *)
+      exec "$NATIVE_PROXY" "${leading_options[@]}" "$@"
+      ;;
+  esac
+done
+
+exec "$NATIVE_PROXY" "${leading_options[@]}"

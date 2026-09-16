@@ -2,16 +2,23 @@
 set -euo pipefail
 
 INSTALL_ROOT="$HOME/.kimmizo-secretary/auto"
-PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+NATIVE_PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+PROXY_PATH="$INSTALL_ROOT/kimmizo-desktop-entrypoint"
+CATALOG_LAUNCHER="$INSTALL_ROOT/kimmizo-real-codex"
+MODEL_CATALOG="$INSTALL_ROOT/model-catalog.json"
 LABEL="com.kimmizo.kimmizo-auto"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
 
-[[ -x "$PROXY_PATH" ]] || {
-  print -u2 -r -- "DEGRADED: Kimmizo executable is missing: $PROXY_PATH"
+[[ -x "$NATIVE_PROXY_PATH" && -x "$PROXY_PATH" ]] || {
+  print -u2 -r -- "DEGRADED: Kimmizo executable or Desktop entrypoint is missing."
+  exit 1
+}
+[[ -x "$CATALOG_LAUNCHER" && -f "$MODEL_CATALOG" && -f "$INSTALL_ROOT/real-codex-native.path" ]] || {
+  print -u2 -r -- "DEGRADED: Auto model catalog launcher is incomplete."
   exit 1
 }
 
-proxy_status="$($PROXY_PATH --athena-status)" || {
+proxy_status="$($NATIVE_PROXY_PATH --athena-status)" || {
   print -u2 -r -- "DEGRADED: Kimmizo runtime self-check failed."
   print -r -- "$proxy_status"
   exit 1
@@ -36,4 +43,17 @@ active_cli="$(/bin/launchctl getenv CODEX_CLI_PATH 2>/dev/null || true)"
 }
 
 print -r -- "PASS: LaunchAgent and CODEX_CLI_PATH are active for Kimmizo."
+catalog_status="$("$CATALOG_LAUNCHER" debug models 2>/dev/null)" || {
+  print -u2 -r -- "DEGRADED: Codex rejected the installed Auto model catalog."
+  exit 1
+}
+print -r -- "$catalog_status" | /usr/bin/grep -F '"slug":"athena-auto"' >/dev/null || {
+  print -u2 -r -- "DEGRADED: athena-auto is absent from the installed Codex catalog."
+  exit 1
+}
+print -r -- "$catalog_status" | /usr/bin/grep -F '"display_name":"✦ Auto"' >/dev/null || {
+  print -u2 -r -- "DEGRADED: ✦ Auto is absent from the installed Codex catalog."
+  exit 1
+}
+print -r -- "PASS: ✦ Auto is present in the installed Codex model catalog."
 print -r -- "Next: quit Codex with Command-Q, reopen it, and confirm that ✦ Auto appears."

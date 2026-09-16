@@ -3,7 +3,8 @@ set -euo pipefail
 
 INSTALL_ROOT="$HOME/.kimmizo-secretary/auto"
 EXPECTED_ROOT="$HOME/.kimmizo-secretary/auto"
-PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+LEGACY_PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+PROXY_PATH="$INSTALL_ROOT/kimmizo-desktop-entrypoint"
 LABEL="com.kimmizo.kimmizo-auto"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
 RECEIPT="$INSTALL_ROOT/install.json"
@@ -37,7 +38,7 @@ if [[ -f "$LAUNCH_AGENT" ]]; then
 fi
 
 active_cli="$(/bin/launchctl getenv CODEX_CLI_PATH 2>/dev/null || true)"
-if [[ "$active_cli" == "$PROXY_PATH" ]]; then
+if [[ "$active_cli" == "$PROXY_PATH" || "$active_cli" == "$LEGACY_PROXY_PATH" ]]; then
   if [[ -n "$previous_cli" ]]; then
     /bin/launchctl setenv CODEX_CLI_PATH "$previous_cli"
   else

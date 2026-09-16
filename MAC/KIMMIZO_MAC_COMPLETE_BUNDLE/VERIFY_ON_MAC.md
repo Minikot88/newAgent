@@ -24,7 +24,7 @@ cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
 }
 ```
 
-และต้องมีบรรทัด `PASS: LaunchAgent and CODEX_CLI_PATH are active for Kimmizo.`
+และต้องมีบรรทัดทั้ง `PASS: LaunchAgent and CODEX_CLI_PATH are active for Kimmizo.` และ `PASS: ✦ Auto is present in the installed Codex model catalog.`
 
 ## 2. ตรวจใน Codex UI
 
@@ -41,7 +41,7 @@ cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
 เลขาคิม ช่วยสรุปว่าเธอจะทำงานกับโปรเจกต์นี้อย่างไรแบบสั้น ๆ
 ```
 
-ผลที่คาดหวัง: ตอบภาษาไทย ใช้สรรพนาม `ฉัน` และลงท้ายอย่างสุภาพด้วย `ค่ะ`
+ผลที่คาดหวัง: ตอบในบุคลิกผู้หญิง ใช้สรรพนาม `ฉัน` และลงท้ายอย่างสุภาพด้วย `ค่ะ`
 
 ## 4. ตรวจ Auto แบบปลอดภัย
 
@@ -63,8 +63,15 @@ cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
    launchctl getenv CODEX_CLI_PATH
    ```
 
-   ต้องเป็น `/Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto/kimmizo-auto`
+   ต้องเป็น `/Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto/kimmizo-desktop-entrypoint`
 
-4. ถ้าสถานะไม่ใช่ `ready` หรือ Model ยังไม่ขึ้น ให้ส่ง output จาก `./status.sh` กลับมา โดยไม่ส่งข้อมูลบัญชีหรือไฟล์ส่วนตัว
+4. ถ้าสถานะไม่ใช่ `ready` หรือ Model ยังไม่ขึ้น ให้รัน installer ซ้ำจาก root ของ bundle แล้วปิด Codex ด้วย `Command-Q` ก่อนเปิดใหม่:
+
+   ```zsh
+   ./install.sh --name "ชื่อที่เลือก"
+   ./status.sh
+   ```
+
+5. หากยังไม่ขึ้น ให้ส่งเฉพาะ output จาก `./status.sh` และผลของ `launchctl getenv CODEX_CLI_PATH` กลับมา โดยไม่ส่งข้อมูลบัญชีหรือไฟล์ส่วนตัว
 
 สถานะ cross-build จาก Windows เพียงอย่างเดียวไม่ถือว่าผ่านขั้นนี้ ต้องเห็นผลจริงจาก Mac และ UI

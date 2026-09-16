@@ -33,7 +33,7 @@ chmod +x install.sh status.sh uninstall.sh
 ผลสำเร็จควรมีบรรทัด:
 
 ```text
-PASS: Kimmizo installed at /Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto
+PASS: <ชื่อที่เลือก> installed at /Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto
 ```
 
 จากนั้นปิด Codex ด้วย `Command-Q`, เปิดใหม่ และรัน:
@@ -48,7 +48,7 @@ cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
 รัน:
 
 ```zsh
-find /Applications/Codex.app/Contents/Resources -type f \( -name codex -o -name codex-cli \) -perm -111 -print
+find /Applications -path '*/Contents/Resources/*' -type f \( -name codex -o -name codex-cli \) -perm -111 -print
 ```
 
 ถ้าได้หนึ่ง path ให้ส่ง path นั้นแก่ installer:
@@ -60,10 +60,27 @@ cd ~/Desktop/Codex/KIMMIZO_MAC_COMPLETE_BUNDLE
 
 ห้ามเลือก `kimmizo-auto` เป็น real Codex เพราะจะเกิดการเรียกวน ตัวติดตั้งจะปฏิเสธกรณีนี้อัตโนมัติ
 
+## ถ้า `✦ Auto` ยังไม่ขึ้น
+
+อย่าแก้ `~/.codex/config.toml` และอย่าเปลี่ยน `CODEX_CLI_PATH` เอง ให้ตรวจจาก root ของ bundle:
+
+```zsh
+./status.sh
+launchctl getenv CODEX_CLI_PATH
+```
+
+ค่าหลังคำสั่งที่สองต้องเป็น:
+
+```text
+/Users/<ชื่อผู้ใช้>/.kimmizo-secretary/auto/kimmizo-desktop-entrypoint
+```
+
+ถ้าไม่ตรง ให้รัน installer ซ้ำจาก bundle เดิมด้วย `./install.sh --name "ชื่อที่เลือก"` แล้วใช้ `Command-Q` ปิด Codex ทุกหน้าต่างก่อนเปิดใหม่. Entry point นี้จำเป็นเพราะ Codex Desktop ส่ง `-c` มาก่อน `app-server`; ไบนารี Kimmizo จะไม่เข้า proxy mode หากไม่มีการจัดลำดับ argument นี้.
+
 ## การใช้งาน
 
 - เลือก `✦ Auto` เมื่อต้องการให้ระบบปรับโมเดลและ effort ตามช่วงงาน
-- เรียกชื่อ “เลขาคิม” ในแชทเพื่อเปิดบุคลิกภาษาไทยของเลขาคิมใน task นั้น
+- เรียกชื่อ “คิม” ในแชทเพื่อเปิดบุคลิกภาษาไทยของเลขาคิมใน task นั้น
 - พิมพ์ `เริ่มงานใหม่:` เมื่อต้องการให้ Auto ประเมินระดับงานใหม่แทนการรักษาระดับเดิม
 - งานระดับ Ultra ต้องยืนยันด้วยข้อความ `อนุมัติ` ก่อน
 

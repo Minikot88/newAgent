@@ -1,0 +1,23 @@
+#!/bin/zsh
+set -euo pipefail
+
+RUNTIME_ROOT="$(cd "$(dirname "$0")" && pwd -P)"
+NATIVE_PATH_FILE="$RUNTIME_ROOT/real-codex-native.path"
+CATALOG_PATH="$RUNTIME_ROOT/model-catalog.json"
+
+[[ -f "$NATIVE_PATH_FILE" ]] || {
+  print -u2 -r -- "kimmizo-real-codex: missing real-codex-native.path"
+  exit 78
+}
+REAL_CODEX="$(<"$NATIVE_PATH_FILE")"
+[[ "$REAL_CODEX" == /* && -x "$REAL_CODEX" && ! -d "$REAL_CODEX" ]] || {
+  print -u2 -r -- "kimmizo-real-codex: real Codex path is not an absolute executable"
+  exit 78
+}
+[[ -f "$CATALOG_PATH" ]] || {
+  print -u2 -r -- "kimmizo-real-codex: missing model-catalog.json"
+  exit 78
+}
+
+unset CODEX_CLI_PATH
+exec "$REAL_CODEX" -c "model_catalog_json=\"$CATALOG_PATH\"" "$@"

@@ -5,9 +5,13 @@ IFS=$'\n\t'
 BUNDLE_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 SOURCE_ROOT="$BUNDLE_DIR/kimmizo-auto-macos"
 SOURCE_BINARY="$BUNDLE_DIR/bin/darwin-arm64/kimmizo-auto"
+SOURCE_ENTRYPOINT="$SOURCE_ROOT/kimmizo-desktop-entrypoint"
+SOURCE_LAUNCHER="$SOURCE_ROOT/kimmizo-real-codex"
+SOURCE_CATALOG="$SOURCE_ROOT/model-catalog.json"
 INSTALL_PARENT="$HOME/.kimmizo-secretary"
 INSTALL_ROOT="$INSTALL_PARENT/auto"
-PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+NATIVE_PROXY_PATH="$INSTALL_ROOT/kimmizo-auto"
+PROXY_PATH="$INSTALL_ROOT/kimmizo-desktop-entrypoint"
 LABEL="com.kimmizo.kimmizo-auto"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/$LABEL.plist"
 STAGE_ROOT=""
@@ -79,7 +83,7 @@ fi
   print -u2 -r -- "Missing binary: $SOURCE_BINARY"
   exit 66
 }
-for required in model-policy.json model-policy.sha256 voice-bootstrap.json voice-bootstrap.sha256; do
+for required in kimmizo-desktop-entrypoint kimmizo-real-codex model-catalog.json model-policy.json model-policy.sha256 voice-bootstrap.json voice-bootstrap.sha256; do
   [[ -f "$SOURCE_ROOT/$required" ]] || {
     print -u2 -r -- "Missing runtime file: $required"
     exit 66
@@ -102,17 +106,18 @@ ORIGINAL_ACTIVE_CLI="$ACTIVE_CLI"
 MANAGED_EXISTING=0
 PREVIOUS_CLI="$ACTIVE_CLI"
 
-if [[ -f "$INSTALL_ROOT/install.json" && -f "$LAUNCH_AGENT" ]]; then
+if [[ -f "$INSTALL_ROOT/install.json" ]]; then
   receipt_root="$(/usr/bin/plutil -extract installRoot raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
   receipt_label="$(/usr/bin/plutil -extract Label raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
-  agent_label="$(/usr/bin/plutil -extract Label raw -o - "$LAUNCH_AGENT" 2>/dev/null || true)"
-  if [[ "$receipt_root" == "$INSTALL_ROOT" && "$receipt_label" == "$LABEL" && "$agent_label" == "$LABEL" ]]; then
+  agent_label=""
+  [[ ! -f "$LAUNCH_AGENT" ]] || agent_label="$(/usr/bin/plutil -extract Label raw -o - "$LAUNCH_AGENT" 2>/dev/null || true)"
+  if [[ "$receipt_root" == "$INSTALL_ROOT" && "$receipt_label" == "$LABEL" && ( ! -f "$LAUNCH_AGENT" || "$agent_label" == "$LABEL" ) ]]; then
     MANAGED_EXISTING=1
     PREVIOUS_CLI="$(/usr/bin/plutil -extract previousCodexCliPath raw -o - "$INSTALL_ROOT/install.json" 2>/dev/null || true)"
   fi
 fi
 
-if [[ -n "$ACTIVE_CLI" && "$ACTIVE_CLI" != "$PROXY_PATH" ]]; then
+if [[ -n "$ACTIVE_CLI" && "$ACTIVE_CLI" != "$PROXY_PATH" && "$ACTIVE_CLI" != "$NATIVE_PROXY_PATH" ]]; then
   print -u2 -r -- "CODEX_CLI_PATH is controlled by another executable: $ACTIVE_CLI"
   print -u2 -r -- "Kimmizo did not change it. Remove that override first, then run this installer again."
   exit 73
@@ -126,7 +131,9 @@ if [[ -e "$LAUNCH_AGENT" && $MANAGED_EXISTING -ne 1 ]]; then
   exit 73
 fi
 
-if [[ -z "$REAL_CODEX" && $MANAGED_EXISTING -eq 1 && -f "$INSTALL_ROOT/real-codex.path" ]]; then
+if [[ -z "$REAL_CODEX" && $MANAGED_EXISTING -eq 1 && -f "$INSTALL_ROOT/real-codex-native.path" ]]; then
+  REAL_CODEX="$(<"$INSTALL_ROOT/real-codex-native.path")"
+elif [[ -z "$REAL_CODEX" && $MANAGED_EXISTING -eq 1 && -f "$INSTALL_ROOT/real-codex.path" ]]; then
   REAL_CODEX="$(<"$INSTALL_ROOT/real-codex.path")"
 fi
 if [[ -z "$REAL_CODEX" ]]; then
@@ -173,7 +180,7 @@ fi
   print -u2 -r -- "The real Codex path must be an absolute executable file: $REAL_CODEX"
   exit 66
 }
-[[ "$REAL_CODEX" != "$SOURCE_BINARY" && "$REAL_CODEX" != "$PROXY_PATH" ]] || {
+[[ "$REAL_CODEX" != "$SOURCE_BINARY" && "$REAL_CODEX" != "$PROXY_PATH" && "$REAL_CODEX" != "$NATIVE_PROXY_PATH" ]] || {
   print -u2 -r -- "The real Codex path points to Kimmizo itself."
   exit 66
 }
@@ -209,8 +216,8 @@ rollback() {
   if (( SUCCESS == 0 )); then
     if (( NEW_AGENT_INSTALLED == 1 )); then
       /bin/launchctl bootout "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
+      [[ -f "$LAUNCH_AGENT" ]] && /bin/rm -f "$LAUNCH_AGENT"
     fi
-    [[ -f "$LAUNCH_AGENT" ]] && /bin/rm -f "$LAUNCH_AGENT"
     if (( AGENT_WAS_BACKED_UP == 1 )) && [[ -f "$AGENT_BACKUP" ]]; then
       /bin/mv "$AGENT_BACKUP" "$LAUNCH_AGENT"
       /bin/launchctl bootstrap "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
@@ -233,6 +240,9 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 /bin/cp "$SOURCE_BINARY" "$STAGE_ROOT/kimmizo-auto"
+/bin/cp "$SOURCE_ENTRYPOINT" "$STAGE_ROOT/kimmizo-desktop-entrypoint"
+/bin/cp "$SOURCE_LAUNCHER" "$STAGE_ROOT/kimmizo-real-codex"
+/bin/cp "$SOURCE_CATALOG" "$STAGE_ROOT/model-catalog.json"
 /bin/cp "$SOURCE_ROOT/model-policy.json" "$STAGE_ROOT/model-policy.json"
 /bin/cp "$SOURCE_ROOT/model-policy.sha256" "$STAGE_ROOT/model-policy.sha256"
 /bin/cp "$SOURCE_ROOT/voice-bootstrap.json" "$STAGE_ROOT/voice-bootstrap.json"
@@ -241,9 +251,10 @@ trap 'exit 143' TERM
 if [[ $MANAGED_EXISTING -eq 1 && -f "$INSTALL_ROOT/state.json" ]]; then
   /bin/cp "$INSTALL_ROOT/state.json" "$STAGE_ROOT/state.json"
 fi
-print -r -- "$REAL_CODEX" > "$STAGE_ROOT/real-codex.path"
-/bin/chmod 700 "$STAGE_ROOT" "$STAGE_ROOT/kimmizo-auto"
-/bin/chmod 600 "$STAGE_ROOT"/*.json "$STAGE_ROOT"/*.sha256 "$STAGE_ROOT/real-codex.path" "$STAGE_ROOT/KIMMIZO_SECRETARY_PORTABLE_SPEC.md"
+print -r -- "$REAL_CODEX" > "$STAGE_ROOT/real-codex-native.path"
+print -r -- "$STAGE_ROOT/kimmizo-real-codex" > "$STAGE_ROOT/real-codex.path"
+/bin/chmod 700 "$STAGE_ROOT" "$STAGE_ROOT/kimmizo-auto" "$STAGE_ROOT/kimmizo-desktop-entrypoint" "$STAGE_ROOT/kimmizo-real-codex"
+/bin/chmod 600 "$STAGE_ROOT"/*.json "$STAGE_ROOT"/*.sha256 "$STAGE_ROOT/real-codex.path" "$STAGE_ROOT/real-codex-native.path" "$STAGE_ROOT/KIMMIZO_SECRETARY_PORTABLE_SPEC.md"
 /usr/bin/xattr -d com.apple.quarantine "$STAGE_ROOT/kimmizo-auto" >/dev/null 2>&1 || true
 
 RECEIPT="$STAGE_ROOT/install.json"
@@ -259,6 +270,7 @@ RECEIPT="$STAGE_ROOT/install.json"
 /bin/chmod 600 "$RECEIPT"
 
 ATHENA_HOME="$STAGE_ROOT" "$STAGE_ROOT/kimmizo-auto" --athena-self-test >/dev/null
+print -r -- "$INSTALL_ROOT/kimmizo-real-codex" > "$STAGE_ROOT/real-codex.path"
 
 /usr/bin/plutil -create xml1 "$AGENT_TEMP"
 /usr/bin/plutil -insert Label -string "$LABEL" "$AGENT_TEMP"
@@ -284,15 +296,19 @@ fi
 ROOT_REPLACED=1
 /bin/mv "$AGENT_TEMP" "$LAUNCH_AGENT"
 NEW_AGENT_INSTALLED=1
-/bin/launchctl bootstrap "gui/$(id -u)" "$LAUNCH_AGENT"
+/bin/launchctl bootstrap "gui/$(id -u)" "$LAUNCH_AGENT" >/dev/null 2>&1 || true
 /bin/launchctl setenv CODEX_CLI_PATH "$PROXY_PATH"
+[[ "$(/bin/launchctl getenv CODEX_CLI_PATH 2>/dev/null || true)" == "$PROXY_PATH" ]] || {
+  print -u2 -r -- "Could not activate CODEX_CLI_PATH for the current GUI session."
+  exit 1
+}
 
 if [[ "$DEFAULT_AUTO" == "on" ]]; then
-  "$PROXY_PATH" --athena-default-auto-on >/dev/null
+  "$NATIVE_PROXY_PATH" --athena-default-auto-on >/dev/null
 else
-  "$PROXY_PATH" --athena-default-auto-off >/dev/null
+  "$NATIVE_PROXY_PATH" --athena-default-auto-off >/dev/null
 fi
-"$PROXY_PATH" --athena-self-test >/dev/null
+"$NATIVE_PROXY_PATH" --athena-self-test >/dev/null
 
 SUCCESS=1
 trap - EXIT INT TERM
